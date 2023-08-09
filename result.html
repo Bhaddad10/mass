@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link REL = "SHORTCUT ICON" href="icon1.png">
+  <title>Massari Energia | Descontos</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Estilo para a div que contém o gráfico */
+    #grafico-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 25%; /* Ajuste a largura conforme necessário */
+      height: 25; /* Ajuste a altura conforme necessário */
+      margin: 0 auto;
+      background-color: white; /* Fundo branco */
+      box-sizing: border-box;
+      padding: 10px; /* Espaçamento interno */
+    }
+    /* Estilo para o canvas do gráfico */
+    #grafico {
+      max-width: 100%;
+    }
+  </style>
+
+</head>
+<body>
+
+  <header>
+    <img src="logo1.png" alt="logo" onclick="homePage()">  
+  </header>
+
+  <nav>
+    <!-- Opções de navegação do site (pode incluir outras páginas do site) -->
+  </nav><br>
+
+  <h2>Resultados</h2><br>
+
+  <!-- Use a div com o estilo definido para envolver o canvas do gráfico -->
+  <div id="grafico-container">
+    <canvas id="grafico"></canvas>
+  </div>
+
+  <main>
+
+  </main>
+
+  <footer>
+    Copyright &copy; 2022 Massari Energia - Todos os direitos reservados.
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('grafico');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Cativo', 'Livre', 'Economia'],
+        datasets: [{
+          label: 'Gráfico de economia anual',
+          data: [19, 12, 8],
+          borderWidth: 1,
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(144, 238, 144)',
+          ]
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

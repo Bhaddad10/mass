@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link REL = "SHORTCUT ICON" href="icon1.png">
+    <script src="script.js"></script>
+    <title>Massari Energia | Projeção</title>
+
+    <style>
+        .button-container{
+            display: flex;
+            justify-content: center;
+            
+        }
+        .button-container button{
+            margin: 10px;
+        }
+    </style>
+
+</head>
+    <body>
+    <header>
+        <img src="logo1.png" alt="logo" onclick="homePage()">  
+    </header>
+
+    <nav></nav><br>
+
+    <h2>Escolha o tipo de projeção</h2><br>
+    <div class="button-container">
+        <button id="btnProjecao3Anos">Projeção 3 anos</button>
+        <button id="btnProjecao5Anos">Projeção 5 anos</button>
+    </div>
+    <main>
+        <form id="formProjecao3Anos" style="display: none;">
+            <p>Preencha os dados abaixo:</p><br>
+            <label for="bandeira">Bandeira</label>
+            <select name="bandeira" id="bandeira">
+                <option value="" disabled selected hidden>Selecione</option>
+                <option value="">Verde</option>
+                <option value="">Amarela</option>
+                <option value="">Vermelha 1</option>
+                <option value="">Vermelha 2</option>
+                <option value="">Média</option>
+            </select><br><br>
+            <label>Preço da energia nos</label><br>
+            <label>proximos 3 anos</label><br><br>
+            <label class="campo-ano1">Ano 1</label>
+            <input type="text" name="ano1" id="ano1" placeholder="R$", required><br><br>
+            <label class="campo-ano1">Ano 2</label>
+            <input type="text" name="ano2" id="ano2" placeholder="R$", required><br><br>
+            <label class="campo-ano1">Ano 3</label>
+            <input type="text" name="ano3" id="ano3" placeholder="R$", required><br><br>
+            <button onclick="goResult()">Projetar</button>
+        </form>
+        <form id="formProjecao5Anos" style="display: none;">
+            <p>Preencha os dados abaixo:</p><br>
+            <label for="bandeira">Bandeira</label>
+            <select name="bandeira" id="bandeira">
+                <option value="" disabled selected hidden>Selecione</option>
+                <option value="">Verde</option>
+                <option value="">Amarela</option>
+                <option value="">Vermelha 1</option>
+                <option value="">Vermelha 2</option>
+                <option value="">Média</option>
+            </select><br><br>
+            <label>Preço da energia nos</label><br>
+            <label>proximos 5 anos</label><br><br>
+            <label class="campo-ano2">Ano1</label>
+            <input type="text" name="ano1" id="ano1" placeholder="R$", required><br><br>
+            <label class="campo-ano2">Ano2</label>
+            <input type="text" name="ano2" id="ano2" placeholder="R$", required><br><br>
+            <label class="campo-ano2">Ano3</label>
+            <input type="text" name="ano3" id="ano3" placeholder="R$", required><br><br>
+            <label class="campo-ano2">Ano4</label>
+            <input type="text" name="ano4" id="ano4" placeholder="R$", required><br><br>
+            <label class="campo-ano2">Ano5</label>
+            <input type="text" name="ano5" id="ano5" placeholder="R$", required><br><br>
+
+            <button onclick="goResult()">Projetar</button>
+        </form>
+    </main>
+        <footer>Copyright &copy; 2022 Massari Energia - Todos os direitos reservados.</footer>
+
+    <script>
+        const anoAtual = new Date().getFullYear();
+        const campoAnos = document.querySelectorAll('.campo-ano1');
+        campoAnos.forEach((campo, index)=>{
+            campo.textContent=anoAtual + index;
+        });
+        const anoAtual1 = new Date().getFullYear();
+        const campoAnos1 = document.querySelectorAll('.campo-ano2');
+        campoAnos1.forEach((campo, index)=>{
+            campo.textContent=anoAtual1 + index;
+        });
+        
+
+    const btnProjecao3Anos = document.getElementById('btnProjecao3Anos');
+    const btnProjecao5Anos = document.getElementById('btnProjecao5Anos');
+    const formProjecao3Anos = document.getElementById('formProjecao3Anos');
+    const formProjecao5Anos = document.getElementById('formProjecao5Anos');
+
+    btnProjecao3Anos.addEventListener('click', () => {
+      formProjecao3Anos.style.display = 'block';
+      formProjecao5Anos.style.display = 'none';
+    });
+
+    btnProjecao5Anos.addEventListener('click', () => {
+      formProjecao3Anos.style.display = 'none';
+      formProjecao5Anos.style.display = 'block';
+    });
+    </script>
+</body>
+</html>
