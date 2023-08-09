@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link REL = "SHORTCUT ICON" href="icon1.png">
+  <script src="script.js"></script>
   <title>Massari Energia | Descontos</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -40,6 +41,7 @@
   <h2>Resultados</h2><br>
 
   <!-- Use a div com o estilo definido para envolver o canvas do gráfico -->
+  <label>Exemplo de gráfico</label><br>
   <div id="grafico-container">
     <canvas id="grafico"></canvas>
   </div>
@@ -60,7 +62,7 @@
       data: {
         labels: ['Cativo', 'Livre', 'Economia'],
         datasets: [{
-          label: 'Gráfico de economia anual',
+          label: '',
           data: [19, 12, 8],
           borderWidth: 1,
           backgroundColor: [
