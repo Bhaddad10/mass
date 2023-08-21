@@ -4,8 +4,10 @@ import unicodedata
 
 app = Flask(__name__)
 
+
 def normalize_unicode(text):
     return unicodedata.normalize('NFKD', text).encode('latin-1', 'ignore').decode('utf-8')
+
 
 def get_distribuidoras():
     api_url = "https://dadosabertos.aneel.gov.br/api/3/action/datastore_search"
@@ -40,10 +42,12 @@ def get_distribuidoras():
         print("Erro ao obter dados da API")
         return None
 
+
 @app.route('/nomes-distribuidoras', methods=['GET'])
 def send_data():
     dados = get_distribuidoras()
     return jsonify(dados)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

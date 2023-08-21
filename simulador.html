@@ -1,139 +1,201 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link REL = "SHORTCUT ICON" href="icon1.png">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="SHORTCUT ICON" href="icon1.png" />
     <script src="script.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-    <link href="https://fonts.cdnfonts.com/css/avenir" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.cdnfonts.com/css/avenir" rel="stylesheet" />
     <title>Mass Energy | Simulador</title>
 
     <style>
-        .simulator-form{
-            display: flex;
+      .simulator-form {
+        display: flex;
+      }
 
-        }
-        
-        .selecionaveis,
-        .digitaveis{
-            flex: 1;
-            padding: 10px;
-            width: auto;
-        }
+      .selecionaveis,
+      .digitaveis {
+        flex: 1;
+        padding: 10px;
+        width: auto;
+      }
     </style>
-
-</head>
-    <body>
-
+  </head>
+  <body>
     <header>
-        <img src="logo1.png" alt="logo" onclick="homePage()">  
+      <img src="logo1.png" alt="logo" onclick="homePage()" />
     </header>
 
     <nav></nav>
 
-    <br><h2>Preencha os dados abaixo:</h2>
+    <br />
+    <h2>Preencha os dados abaixo:</h2>
     <main>
-        <form class="simulator-form">
-            
-            <div class="selecionaveis">
-                <label for="distribuidora">Distribuidora</label>
-                <select id="distribuidora">
-                    <option value="" disabled selected hidden>Selecione</option>
-                    <option value="AME">AME</option>
-                    <option value="AMPLA">AMPLA</option>
-                    <option value="EDP SP (Ex Bandeirante)">EDP SP (Ex Bandeirante)</option>
-                    <option value="CEAL">CEAL</option>
-                    <option value="CEB">CEB</option>
-                    <option value="CEEE">CEEE</option>
-                    <option value="CELESC">CELESC</option>
-                    <option value="CELG">CELG</option>
-                    <option value="CELPA">CELPA</option>
-                    <option value="CELPE">CELPE</option>
-                    <option value="CEMAR">CEMAR</option>
-                    <option value="CEMIG">CEMIG</option>
-                    <option value="CEPISA">CEPISA</option>
-                    <option value="CERON">CERON</option>
-                    <option value="COELBA">COELBA</option>
-                    <option value="COELCE">COELCE</option>
-                    <option value="COSERN">COSERN</option>
-                    <option value="CPFL PAULISTA">CPFL PAULISTA</option>
-                    <option value="CPFL PIRATININGA">CPFL PIRATININGA</option>
-                    <option value="CPFL SANTA CRUZ">CPFL SANTA CRUZ</option>
-                    <option value="ELEKTRO">ELEKTRO</option>
-                    <option value="ELETROACRE">ELETROACRE</option>
-                    <option value="ELETROPAULO">ELETROPAULO</option>
-                    <option value="EMS (ENERSUL)">EMS (ENERSUL)</option>
-                    <option value="EMT (CEMAT)">EMT (CEMAT)</option>
-                    <option value="ENERGISA - PO">ENERGISA - PO</option>
-                    <option value="ENERGISA - PB">ENERGISA - PB</option>
-                    <option value="ENERGISA - SE">ENERGISA - SE</option>
-                    <option value="ENERGISA - TO">ENERGISA - TO</option>
-                    <option value="ENERGISA SUL - SULDESTE">ENERGISA SUL - SULDESTE</option>
-                    <option value="EDP ES (Ex: ESCELSA)">EDP ES (Ex: ESCELSA)</option>
-                    <option value="LIGHT">LIGHT</option>
-                    <option value="RGE">RGE</option>
-                    <option value="RGE SUL (Ex: AES SUL)">RGE SUL (Ex: AES SUL)</option>
-                    <option value="SULGIPE">SULGIPE</option>
-                </select><br><br>
+      <form class="simulator-form">
+        <div class="selecionaveis">
+          <label for="distribuidora">Distribuidora</label>
+          <select id="distribuidora">
+            <option value="" disabled selected hidden>Selecione</option>
+            <option value="AME">AME</option>
+            <option value="AMPLA">AMPLA</option>
+            <option value="EDP SP (Ex Bandeirante)">
+              EDP SP (Ex Bandeirante)
+            </option>
+            <option value="CEAL">CEAL</option>
+            <option value="CEB">CEB</option>
+            <option value="CEEE">CEEE</option>
+            <option value="CELESC">CELESC</option>
+            <option value="CELG">CELG</option>
+            <option value="CELPA">CELPA</option>
+            <option value="CELPE">CELPE</option>
+            <option value="CEMAR">CEMAR</option>
+            <option value="CEMIG">CEMIG</option>
+            <option value="CEPISA">CEPISA</option>
+            <option value="CERON">CERON</option>
+            <option value="COELBA">COELBA</option>
+            <option value="COELCE">COELCE</option>
+            <option value="COSERN">COSERN</option>
+            <option value="CPFL PAULISTA">CPFL PAULISTA</option>
+            <option value="CPFL PIRATININGA">CPFL PIRATININGA</option>
+            <option value="CPFL SANTA CRUZ">CPFL SANTA CRUZ</option>
+            <option value="ELEKTRO">ELEKTRO</option>
+            <option value="ELETROACRE">ELETROACRE</option>
+            <option value="ELETROPAULO">ELETROPAULO</option>
+            <option value="EMS (ENERSUL)">EMS (ENERSUL)</option>
+            <option value="EMT (CEMAT)">EMT (CEMAT)</option>
+            <option value="ENERGISA - PO">ENERGISA - PO</option>
+            <option value="ENERGISA - PB">ENERGISA - PB</option>
+            <option value="ENERGISA - SE">ENERGISA - SE</option>
+            <option value="ENERGISA - TO">ENERGISA - TO</option>
+            <option value="ENERGISA SUL - SULDESTE">
+              ENERGISA SUL - SULDESTE
+            </option>
+            <option value="EDP ES (Ex: ESCELSA)">EDP ES (Ex: ESCELSA)</option>
+            <option value="LIGHT">LIGHT</option>
+            <option value="RGE">RGE</option>
+            <option value="RGE SUL (Ex: AES SUL)">RGE SUL (Ex: AES SUL)</option>
+            <option value="SULGIPE">SULGIPE</option></select
+          ><br /><br />
 
-                <label for="tensao">Tensão de fornecimento</label>
-                <select id="tensao">
-                    <option value="" disabled selected hidden>Selecione</option>
-                    <option value="A2">A2 (88 a 138kV)</option>
-                    <option value="A3">A3 (69kV)</option>
-                    <option value="A3A">A3A (30 a 44kV)</option>
-                    <option value="A4">A4 (2,3 a 25kV)</option>
-                </select><br><br>
+          <label for="tensao">Tensão de fornecimento</label>
+          <select id="tensao">
+            <option value="" disabled selected hidden>Selecione</option>
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="A3">A3</option>
+            <option value="A3A">A3a</option>
+            <option value="A4">A4</option>
+            <option value="AS">AS</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="B3">B3</option>
+            <option value="B4a">B4a</option>
+            <option value="B4b">B4b</option></select
+          ><br /><br />
 
-                <label for="modalidade">Modalidade Tarifária</label>
-                <select id="distribuidora">
-                    <option value="" disabled selected hidden>Selecione</option>
-                    <option value="verde">Verde</option>
-                    <option value="azul">Azul</option>
-                </select><br><br>
+          <label for="modalidade">Modalidade Tarifária</label>
+          <select id="distribuidora">
+            <option value="" disabled selected hidden>Selecione</option>
+            <option value="verde">Verde</option>
+            <option value="azul">Azul</option></select
+          ><br /><br />
 
-                <label for="unidades-acl">Possui outras unidades ACL</label>
-                <select id="unidades-acl">
-                    <option value="" disabled selected hidden>Selecione</option>
-                    <option value="sim">Sim</option>
-                    <option value="nao">Não</option>
-                </select>
+          <label for="unidades-acl">Possui outras unidades ACL</label>
+          <select id="unidades-acl">
+            <option value="" disabled selected hidden>Selecione</option>
+            <option value="sim">Sim</option>
+            <option value="nao">Não</option>
+          </select>
+        </div>
+        <div class="digitaveis">
+          <label for="preco-energia">Preço da Energia no ACL</label>
+          <input
+            type="text"
+            id="preco-energia"
+            ,
+            placeholder="Ex: R$100 / MWh"
+          /><br /><br />
 
-            </div>
-            <div class="digitaveis">
-                <label for="preco-energia">Preço da Energia no ACL</label>
-                <input type="text" id="preco-energia", placeholder="Ex: R$100 / MWh"><br><br>
+          <label for="desconto-energia">Desconto da Energia</label>
+          <input
+            type="text"
+            id="desconto-eneriga"
+            ,
+            placeholder="Ex: 15%"
+          /><br /><br />
 
-                <label for="desconto-energia">Desconto da Energia</label>
-                <input type="text" id="desconto-eneriga", placeholder="Ex: 15%"><br><br>
+          <label for="icms">ICMS</label>
+          <input type="text" id="icms" , placeholder="Ex: 10%" /><br /><br />
 
-                <label for="icms">ICMS</label>
-                <input type="text" id="icms", placeholder="Ex: 10%"><br><br>
+          <label for="pis-cofins">PIS / COFINS</label>
+          <input
+            type="text"
+            id="pis-cofins"
+            ,
+            placeholder="Ex: 10%"
+          /><br /><br />
 
-                <label for="pis-cofins">PIS / COFINS</label>
-                <input type="text" id="pis-cofins", placeholder="Ex: 10%"><br><br>
+          <label for="perdas">Perdas</label>
+          <input type="text" id="perdas" , placeholder="Ex: 5%" /><br /><br />
 
-                <label for="perdas">Perdas</label>
-                <input type="text" id="perdas", placeholder="Ex: 5%"><br><br>
+          <label for="demanda-ponta">Demanda Ponta</label>
+          <input
+            type="text"
+            id="demanda-ponta"
+            ,
+            placeholder="Ex: 150 (kW)"
+            ,
+            pattern="^\d{3}$"
+            ,
+            required
+          /><br /><br />
 
-                <label for="demanda-ponta">Demanda Ponta</label>
-                <input type="text" id="demanda-ponta", placeholder="Ex: 150 (kW)", pattern="^\d{3}$", required><br><br>
-                
-                <label for="demanda-fora-ponta">Demanda Fora Ponta</label>
-                <input type="text" id="demanda-fora-ponta", placeholder="Ex: 330 (kW)", pattern ="^\d{3}$", required><br><br>
+          <label for="demanda-fora-ponta">Demanda Fora Ponta</label>
+          <input
+            type="text"
+            id="demanda-fora-ponta"
+            ,
+            placeholder="Ex: 330 (kW)"
+            ,
+            pattern="^\d{3}$"
+            ,
+            required
+          /><br /><br />
 
-                <label for="consumo-fora-ponta">Consumo Ponta</label>
-                <input type="text" id="consumo-fora-ponta", placeholder="Ex: 7,90 (MWh)", pattern ="^\d{1,3}(?:,\d{2})?$", required><br><br>
-                
-                <label for="consumo-fora-ponta">Consumo Fora Ponta</label>
-                <input type="text" id="consumo-fora-ponta", placeholder="Ex: 62,87 (MWh)", pattern ="^\d{1,3}(?:,\d{2})?$", required><br><br>
-            </div>
+          <label for="consumo-fora-ponta">Consumo Ponta</label>
+          <input
+            type="text"
+            id="consumo-fora-ponta"
+            ,
+            placeholder="Ex: 7,90 (MWh)"
+            ,
+            pattern="^\d{1,3}(?:,\d{2})?$"
+            ,
+            required
+          /><br /><br />
 
-        </form>
-        <button onclick="goProjection()">Projeção</button>
+          <label for="consumo-fora-ponta">Consumo Fora Ponta</label>
+          <input
+            type="text"
+            id="consumo-fora-ponta"
+            ,
+            placeholder="Ex: 62,87 (MWh)"
+            ,
+            pattern="^\d{1,3}(?:,\d{2})?$"
+            ,
+            required
+          /><br /><br />
+        </div>
+      </form>
+      <button onclick="goProjection()">Projeção</button>
     </main>
-        <footer>Copyright &copy; 2022 Mass Energy - Todos os direitos reservados.</footer>
-</body>
+    <footer>
+      Copyright &copy; 2022 Mass Energy - Todos os direitos reservados.
+    </footer>
+  </body>
 </html>
