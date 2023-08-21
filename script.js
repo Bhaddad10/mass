@@ -23,7 +23,6 @@ function goResult(){
 
   window.location.href = "result.html"
 }
-
 document.onkeydown = (e) => {
   if (e.key == 123) {
       e.preventDefault();
