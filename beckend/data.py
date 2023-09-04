@@ -1,8 +1,10 @@
 import requests
 from flask import Flask, jsonify
 import unicodedata
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 def normalize_unicode(text):
@@ -11,36 +13,37 @@ def normalize_unicode(text):
 
 def get_distribuidoras():
     api_url = "https://dadosabertos.aneel.gov.br/api/3/action/datastore_search"
-    params = {
-        "resource_id": "fcf2906c-7c32-4b9b-a637-054e7a5234f4",
-        "limit": 228000
-    }
+    resource_id = "fcf2906c-7c32-4b9b-a637-054e7a5234f4"
+    limit = 10000  # Tamanho do lote por requisição
+    offset = 0
+    all_nomes_empresas = set()
 
-    response = requests.get(api_url, params=params)
+    while True:
+        params = {
+            "resource_id": resource_id,
+            "fields": "SigAgente",
+            "limit": limit,
+            "offset": offset
+        }
 
-    if response.status_code == 200:
+        response = requests.get(api_url, params=params)
         data = response.json()
+
         registros = data['result']['records']
-        empresas_exibidas = set()
-        nomes_empresas_ordenados = []
 
-        for registro in registros:
-            sig_agente = registro['SigAgente']
-            decoded_sig_agente = normalize_unicode(sig_agente)
-            if decoded_sig_agente not in empresas_exibidas:
-                empresas_exibidas.add(decoded_sig_agente)
-                nomes_empresas_ordenados.append(decoded_sig_agente)
+        # Filtrar distribuidoras com ano de vigência igual ou superior ao ano atual
+        filtered_registros = [registro for registro in registros]
+        nomes_empresas = {normalize_unicode(
+            registro['SigAgente']) for registro in filtered_registros}
+        all_nomes_empresas.update(nomes_empresas)
 
-        nomes_empresas_ordenados.sort()
+        if len(nomes_empresas) < limit:
+            break
 
-        print("Dados antes de enviar para a página web:")
-        for empresa in nomes_empresas_ordenados:
-            print(empresa)
+        offset += limit  # Incrementa o offset pelo tamanho do lote
 
-        return nomes_empresas_ordenados
-    else:
-        print("Erro ao obter dados da API")
-        return None
+    nomes_empresas_ordenados = sorted(all_nomes_empresas)
+    return nomes_empresas_ordenados
 
 
 @app.route('/nomes-distribuidoras', methods=['GET'])
