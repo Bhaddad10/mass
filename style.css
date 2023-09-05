@@ -1,80 +1,78 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', 'Helvetica', 'sans-serif';
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Avenir", "Roboto", "sans-serif";
 }
 
 body {
-    color: white;
-    background-color: #1e3653;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+  color: #112532;
+  background-image: linear-gradient(to left, #00ff54, #0095ff);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 header {
-    background-color: white;
-    color: #1e3653;
-    text-align: center;
-    padding: 10px;
-    display: flex;
-    align-items: center;
+  background-image: linear-gradient(to left, #00ff54, #0095ff);
+}
+
+header {
+  color: white;
+  text-align: center;
+  padding: 10px;
+  display: flex;
+  align-items: center;
 }
 
 header img {
-    margin-right: 10px;
-    margin-left: 10px;
-    cursor: pointer;
+  margin-right: 10px;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 footer {
-    background-color: white;
-    color: black;
-    padding: 10px;
-    flex-shrink: 0;
-    text-align: center;
+  background-color: white;
+  padding: 10px;
+  flex-shrink: 0;
+  text-align: center;
 }
 
 nav {
-    background-color: #eee;
-    padding: 10px;
+  background-color: white;
+  padding: 2px;
 }
 
 main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 select,
 input[type="text"],
-input[type="password"]{
-    width: 100%;
-    border-radius: 8px;
-    padding: 8px;
-    border: 1px solid #ccc;
+input[type="password"] {
+  width: 75%;
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid #ccc;
 }
 
-button{
-    border-radius: 8px;
-    padding: 8px 16px;
-    background-color: #033250;
-    color: white;
-    border: 2px solid #c69e33;
-    cursor: pointer;
-}
-
-nav{
-    
-    background-color: #112532;
+button {
+  border-radius: 8px;
+  padding: 8px 16px;
+  background-color: white;
+  color: #112532;
+  border: 2px solid #0095ff;
+  cursor: pointer;
 }

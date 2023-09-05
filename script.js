@@ -14,16 +14,10 @@ function goSimulator(){
   window.location.href = "simulador.html"
 }
 
-function goProjection(){
-
-  window.location.href = "projecao.html"
-}
-
 function goResult(){
 
   window.location.href = "result.html"
 }
-
 document.onkeydown = (e) => {
   if (e.key == 123) {
       e.preventDefault();
