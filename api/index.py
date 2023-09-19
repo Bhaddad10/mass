@@ -9,13 +9,13 @@ url = "https://dadosabertos.aneel.gov.br/api/3/action/datastore_search_sql"
 
 sql_query = """
     SELECT DISTINCT "SigAgente", "DscSubGrupo", "DscModalidadeTarifaria", "VlrTUSD",
-    "VlrTE", "NomPostoTarifario", "DscUnidadeTerciaria", "DscREH","DatInicioVigencia", "DatFimVigencia"
+    "VlrTE", "NomPostoTarifario", "DscUnidadeTerciaria", "DscREH","DatInicioVigencia", "DatFimVigencia", "DscDetalhe"
     FROM "fcf2906c-7c32-4b9b-a637-054e7a5234f4"
     WHERE "DscBaseTarifaria" = 'Tarifa de Aplicação'
     AND CURRENT_DATE BETWEEN TO_DATE("DatInicioVigencia", 'YYYY-MM-DD')
     AND TO_DATE("DatFimVigencia", 'YYYY-MM-DD')
     AND ("DscModalidadeTarifaria" = 'Azul' OR "DscModalidadeTarifaria" = 'Verde')
-    AND ("NomPostoTarifario" = 'Ponta' OR "NomPostoTarifario" = 'Fora ponta')
+    AND ("DscDetalhe" = 'Não se aplica')
     ORDER BY "SigAgente" ASC
 """
 

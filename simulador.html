@@ -93,6 +93,7 @@
             placeholder="Ex: 330 (kW)"
             pattern="^\d{3}$"
             required
+            disabled
           /><br /><br />
 
           <label for="consumo-ponta">Consumo Ponta</label>
@@ -218,6 +219,7 @@
       const selectModalidade = document.getElementById("modalidade");
       const selectTensaoAcl = document.getElementById("fornecimento-acl");
       const selectModalidadeAcl = document.getElementById("modalidade-acl");
+      const inputDFP = document.getElementById("demanda-fora-ponta");
 
       const url = "http://127.0.0.1:5000/teste";
 
@@ -252,6 +254,8 @@
             ];
 
             // Limpando o campo selectTensao
+            selectModalidade.innerHTML =
+              '<option value="" disabled selected hidden>Selecione</option>';
             selectTensao.innerHTML =
               '<option value="" disabled selected hidden>Selecione</option>';
             selectTensaoAcl.innerHTML =
@@ -320,6 +324,11 @@
           });
 
           selectModalidade.addEventListener("change", function () {
+            if (selectModalidade.value == "Verde") {
+              inputDFP.disabled = true;
+            } else {
+              inputDFP.disabled = false;
+            }
             getCativoProfile();
           });
 
@@ -347,57 +356,76 @@
               );
             });
 
+            console.log(
+              "Busca: \n Distribuidora: " +
+                distribuidora +
+                " Tensão: " +
+                tensao +
+                " Modalidade Tarifária: " +
+                modalidade
+            );
+
+            var maxValueTeP = 0;
+            var maxValueTeFp = 0;
+
             resultadosFiltrados.forEach(function (json) {
-              if (
-                json["DscUnidadeTerciaria"] === "kW" &&
-                json["NomPostoTarifario"] === "Ponta"
-              ) {
-                tusdKwValueP = json["VlrTUSD"];
-              } else if (
-                json["DscUnidadeTerciaria"] === "kW" &&
-                json["NomPostoTarifario"] === "Fora ponta"
-              ) {
-                tusdKwValueFp = json["VlrTUSD"];
+              if (json["DscUnidadeTerciaria"] === "kW") {
+                if (json["NomPostoTarifario"] === "Ponta") {
+                  tusdKwValueP = parseFloat(json["VlrTUSD"].replace(",", "."));
+                } else if (json["NomPostoTarifario"] === "Fora ponta") {
+                  tusdKwValueFp = parseFloat(json["VlrTUSD"].replace(",", "."));
+                } else if (
+                  json["NomPostoTarifario"] === "Não se aplica" &&
+                  json["DscModalidadeTarifaria"] === "Verde"
+                ) {
+                  tusdKwValueP = parseFloat(json["VlrTUSD"].replace(",", "."));
+                }
+              } else if (json["DscUnidadeTerciaria"] === "MWh") {
+                if (json["NomPostoTarifario"] === "Ponta") {
+                  tusdMWhValueP = parseFloat(json["VlrTUSD"].replace(",", "."));
+                  var teMWhValue = parseFloat(json["VlrTE"].replace(",", "."));
+                  if (teMWhValue > maxValueTeP) {
+                    maxValueTeP = teMWhValue;
+                  }
+                } else if (json["NomPostoTarifario"] === "Fora ponta") {
+                  if (json["DscModalidadeTarifaria"] === "Azul") {
+                    tusdMWhValueFp = parseFloat(
+                      json["VlrTUSD"].replace(",", ".")
+                    );
+                  } else if (
+                    json["DscModalidadeTarifaria"] === "Verde" &&
+                    json["NomPostoTarifario"] === "Não se aplica"
+                  ) {
+                    tusdKwValueFp = 0;
+                  } else {
+                    tusdMWhValueFp = parseFloat(
+                      json["VlrTUSD"].replace(",", ".")
+                    );
+                  }
+                  var teMWhValue = parseFloat(json["VlrTE"].replace(",", "."));
+                  if (teMWhValue > maxValueTeFp) {
+                    maxValueTeFp = teMWhValue;
+                  }
+                }
               }
             });
 
-            // Agora as variáveis têm os valores correspondentes
-            console.log("Valor TUSD do Kw na ponta:", tusdKwValueP);
-            console.log("Valor TUSD do Kw fora ponta:", tusdKwValueFp);
-            console.log("Valor TUSD do MWh na ponta:", tusdMWhValueP);
-            console.log("Valor TUSD do MWh fora ponta:", tusdMWhValueFp);
-            console.log("Valor TE do MWh na ponta:", teMWhValueP);
-            console.log("Valor TE do MWh fora ponta:", teMWhValueFp);
+            console.log("Valor do kW na TUSD na ponta", tusdKwValueP);
+            console.log("Valor do kW na TUSD Fora ponta", tusdKwValueFp);
+            console.log("Valor do MWh na TUSD na ponta", tusdMWhValueP);
+            console.log("Valor do MWh na TUSD Fora ponta", tusdMWhValueFp);
+            console.log("Valor do MWh na TE na Ponta: ", maxValueTeP);
+            console.log("Valor do MWh na TE Fora Ponta: ", maxValueTeFp);
 
-            console.log(
-              "Jsons correspondentes ao perfil Cativo:",
-              resultadosFiltrados
-            );
-
+            console.log("Jsons válidos para busca: ", resultadosFiltrados);
             return resultadosFiltrados;
           }
 
           function getLivreProfile() {
-            var distribuidora = selectDistribuidoras.value;
-            var tensao = selectTensaoAcl.value;
-            var modalidade = selectModalidadeAcl.value;
-
-            var resultadosFiltrados = jsonData.filter(function (json) {
-              return (
-                json["SigAgente"] === distribuidora &&
-                json["DscSubGrupo"] === tensao &&
-                json["DscModalidadeTarifaria"] === modalidade
-              );
-            });
-
-            console.log(
-              "Jsons correspondentes ao perfil Livre: ",
-              resultadosFiltrados
-            );
-
             return resultadosFiltrados;
           }
         })
+
         .catch((error) => {
           console.error("Erro ao carregar JSON:", error);
         });
