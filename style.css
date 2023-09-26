@@ -61,6 +61,7 @@ main {
 
 select,
 input[type="text"],
+input[type="number"],
 input[type="password"] {
   width: 75%;
   border-radius: 8px;

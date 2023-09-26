@@ -69,9 +69,9 @@
             <option value="" disabled selected hidden>Selecione</option>
             <option value="Verde">Verde</option>
             <option value="Amarela">Amarela</option>
-            <option value="Vermelha 1">Vermelha 1</option>
-            <option value="Vermelha 2">Vermelha 2</option>
-            <option value="Média">Média</option>
+            <option value="Vermelha P1">Vermelha P1</option>
+            <option value="Vermelha P2">Vermelha P2</option>
+            <option value="Media">Média</option>
           </select>
           <br /><br />
 
@@ -79,7 +79,7 @@
           <br />
           <label for="demanda-ponta">Demanda Ponta</label>
           <input
-            type="text"
+            type="number"
             id="demanda-ponta"
             placeholder="Ex: 150 (kW)"
             pattern="^\d{3}$"
@@ -88,7 +88,7 @@
 
           <label for="demanda-fora-ponta">Demanda Fora Ponta</label>
           <input
-            type="text"
+            type="number"
             id="demanda-fora-ponta"
             placeholder="Ex: 330 (kW)"
             pattern="^\d{3}$"
@@ -98,7 +98,7 @@
 
           <label for="consumo-ponta">Consumo Ponta</label>
           <input
-            type="text"
+            type="number"
             id="consumo-ponta"
             placeholder="Ex: 7,90 (MWh)"
             pattern="^\d{1,3}(?:,\d{2})?$"
@@ -107,7 +107,7 @@
 
           <label for="consumo-fora-ponta">Consumo Fora Ponta</label>
           <input
-            type="text"
+            type="number"
             id="consumo-fora-ponta"
             placeholder="Ex: 62,87 (MWh)"
             pattern="^\d{1,3}(?:,\d{2})?$"
@@ -127,14 +127,14 @@
           <br />
           <label for="preco-energia">Preço da Energia no ACL</label>
           <input
-            type="text"
+            type="number"
             id="preco-energia"
             placeholder="Ex: R$100 / MWh"
           /><br /><br />
 
           <label for="desconto-energia">Desconto da Energia</label>
           <input
-            type="text"
+            type="number"
             id="desconto-energia"
             placeholder="Ex: 15%"
           /><br /><br />
@@ -161,7 +161,7 @@
 
           <label for="custo-value">Valor do custo adicional</label>
           <input
-            type="text"
+            type="number"
             name="custo-value"
             id="custo-value"
             placeholder="Ex: R$ 1.800,00"
@@ -170,19 +170,27 @@
           <br /><br />
 
           <h2>Impostos</h2>
-          <br />
+          <br>
+          <label for="Impostos">Impostos no Cálculo</label>
+          <select id="impostos">
+            <option disabled selected hidden>Selecione</option>
+            <option>Com impostos</option>
+            <option>Sem impostos</option>
+          </select>
+          <br /><br>
           <label for="icms">ICMS</label><br />
-          <input type="text" id="icms" placeholder="Padrão: 25%" /> <br /><br />
+          <input type="number" id="icms" placeholder="Padrão: 25%" />
+          <br /><br />
 
           <label for="pis-cofins">PIS / COFINS</label><br />
           <input
-            type="text"
+            type="number"
             id="pis-cofins"
             placeholder="Padrão: 5%"
           /><br /><br />
 
           <label for="perdas">Porcentagem de perdas</label><br />
-          <input type="text" id="perdas" placeholder="Ex: 3%" /><br /><br />
+          <input type="number" id="perdas" placeholder="Ex: 3%" /><br /><br />
 
           <label for="tipo-calculo">Tipo de cálculo</label>
           <select name="calculo" id="calculo">
@@ -196,252 +204,21 @@
           <h2>Projeção</h2>
           <br />
           <label for="qtd-anos">Projetar para quantos anos ?</label>
-          <input type="text" id="qtd-anos" placeholder="Ex: 5" /><br /><br />
+          <input type="number" id="qtd-anos" placeholder="Ex: 5" /><br /><br />
 
           <label for="media-preco-energia">Média do preço da energia</label>
           <input
-            type="text"
+            type="number"
             id="media-preco-energia"
             placeholder="Ex: R$ 120,00"
           />
         </div>
       </form>
       <br /><br />
-      <button onclick="goResult()">Projetar</button>
+      <button onclick="getInputs()">Projetar</button>
     </main>
     <footer>
       Copyright &copy; 2022 Mass Energy - Todos os direitos reservados.
     </footer>
-
-    <script>
-      const selectDistribuidoras = document.getElementById("distribuidoras");
-      const selectTensao = document.getElementById("tensao");
-      const selectModalidade = document.getElementById("modalidade");
-      const selectTensaoAcl = document.getElementById("fornecimento-acl");
-      const selectModalidadeAcl = document.getElementById("modalidade-acl");
-      const inputDFP = document.getElementById("demanda-fora-ponta");
-
-      const url = "http://127.0.0.1:5000/teste";
-
-      function populateSelect(selectElement, data, key) {
-        var uniqueValues = [...new Set(data.map((item) => item[key]))];
-
-        uniqueValues.forEach((value) => {
-          var option = document.createElement("option");
-          option.text = value;
-          selectElement.add(option);
-        });
-      }
-
-      fetch(url)
-        .then((response) => response.json())
-        .then((jsonData) => {
-          // Populando o primeiro <select> com os dados do JSON
-          populateSelect(selectDistribuidoras, jsonData, "SigAgente");
-
-          // Populando o campo selectTensao com base na seleção de selectDistribuidoras
-          selectDistribuidoras.addEventListener("change", function () {
-            var selectedSigAgente = selectDistribuidoras.value;
-
-            // Filtrando os dados do JSON com base no SigAgente selecionado
-            var filterGroup = jsonData.filter(
-              (item) => item["SigAgente"] === selectedSigAgente
-            );
-
-            // Obtendo as opções únicas para o campo selectTensao
-            var uniqueTensaoValues = [
-              ...new Set(filterGroup.map((item) => item["DscSubGrupo"])),
-            ];
-
-            // Limpando o campo selectTensao
-            selectModalidade.innerHTML =
-              '<option value="" disabled selected hidden>Selecione</option>';
-            selectTensao.innerHTML =
-              '<option value="" disabled selected hidden>Selecione</option>';
-            selectTensaoAcl.innerHTML =
-              '<option value="" disabled selected hidden>Selecione</option>';
-
-            // Populando o campo selectTensao com as novas opções
-            uniqueTensaoValues.forEach((value) => {
-              var option = document.createElement("option");
-              option.text = value;
-              selectTensao.add(option);
-
-              var optionAcl = document.createElement("option");
-              optionAcl.text = value;
-              selectTensaoAcl.add(optionAcl);
-            });
-          });
-          // Adicionando um evento de mudança ao campo selectTensao para atualizar o campo selectModalidade
-          selectTensao.addEventListener("change", function () {
-            var selectedTensao = selectTensao.value;
-
-            // Filtrando os dados do JSON com base na Tensão selecionada
-            var filterTension = jsonData.filter(
-              (item) => item["DscSubGrupo"] === selectedTensao
-            );
-
-            // Obtendo as opções únicas para o campo selectModalidade
-            var uniqueModalidadeValues = [
-              ...new Set(
-                filterTension.map((item) => item["DscModalidadeTarifaria"])
-              ),
-            ];
-
-            // Limpando o campo selectModalidade
-            selectModalidade.innerHTML =
-              '<option value="" disabled selected hidden>Selecione</option>';
-
-            // Populando o campo selectModalidade com as novas opções
-            uniqueModalidadeValues.forEach((value) => {
-              var option = document.createElement("option");
-              option.text = value;
-              selectModalidade.add(option);
-            });
-          });
-
-          selectTensaoAcl.addEventListener("change", function () {
-            var selectedTensao = selectTensaoAcl.value;
-
-            var filterTension = jsonData.filter(
-              (item) => item["DscSubGrupo"] === selectedTensao
-            );
-
-            var uniqueModalidadeAclValues = [
-              ...new Set(
-                filterTension.map((item) => item["DscModalidadeTarifaria"])
-              ),
-            ];
-
-            selectModalidadeAcl.innerHTML =
-              '<option value="" disabled selected hidden>Selecione</option>';
-
-            uniqueModalidadeAclValues.forEach((value) => {
-              var optionAcl = document.createElement("option");
-              optionAcl.text = value;
-              selectModalidadeAcl.add(optionAcl);
-            });
-          });
-
-          selectModalidade.addEventListener("change", function () {
-            if (selectModalidade.value == "Verde") {
-              inputDFP.disabled = true;
-            } else {
-              inputDFP.disabled = false;
-            }
-            getCativoProfile();
-          });
-
-          selectModalidadeAcl.addEventListener("change", function () {
-            getLivreProfile();
-          });
-
-          function getCativoProfile() {
-            var distribuidora = selectDistribuidoras.value;
-            var tensao = selectTensao.value;
-            var modalidade = selectModalidade.value;
-
-            var tusdKwValueP = 0;
-            var tusdKwValueFp = 0;
-            var tusdMWhValueP = 0;
-            var tusdMWhValueFp = 0;
-            var teMWhValueP = 0;
-            var teMWhValueFp = 0;
-
-            var resultadosFiltrados = jsonData.filter(function (json) {
-              return (
-                json["SigAgente"] === distribuidora &&
-                json["DscSubGrupo"] === tensao &&
-                json["DscModalidadeTarifaria"] === modalidade
-              );
-            });
-
-            console.log(
-              "Busca: \n Distribuidora: " +
-                distribuidora +
-                " Tensão: " +
-                tensao +
-                " Modalidade Tarifária: " +
-                modalidade
-            );
-
-            var maxValueTeP = 0;
-            var maxValueTeFp = 0;
-
-            resultadosFiltrados.forEach(function (json) {
-              if (json["DscUnidadeTerciaria"] === "kW") {
-                if (json["NomPostoTarifario"] === "Ponta") {
-                  tusdKwValueP = parseFloat(json["VlrTUSD"].replace(",", "."));
-                } else if (json["NomPostoTarifario"] === "Fora ponta") {
-                  tusdKwValueFp = parseFloat(json["VlrTUSD"].replace(",", "."));
-                } else if (
-                  json["NomPostoTarifario"] === "Não se aplica" &&
-                  json["DscModalidadeTarifaria"] === "Verde"
-                ) {
-                  tusdKwValueP = parseFloat(json["VlrTUSD"].replace(",", "."));
-                }
-              } else if (json["DscUnidadeTerciaria"] === "MWh") {
-                if (json["NomPostoTarifario"] === "Ponta") {
-                  tusdMWhValueP = parseFloat(json["VlrTUSD"].replace(",", "."));
-                  var teMWhValue = parseFloat(json["VlrTE"].replace(",", "."));
-                  if (teMWhValue > maxValueTeP) {
-                    maxValueTeP = teMWhValue;
-                  }
-                } else if (json["NomPostoTarifario"] === "Fora ponta") {
-                  if (json["DscModalidadeTarifaria"] === "Azul") {
-                    tusdMWhValueFp = parseFloat(
-                      json["VlrTUSD"].replace(",", ".")
-                    );
-                  } else if (
-                    json["DscModalidadeTarifaria"] === "Verde" &&
-                    json["NomPostoTarifario"] === "Não se aplica"
-                  ) {
-                    tusdKwValueFp = 0;
-                  } else {
-                    tusdMWhValueFp = parseFloat(
-                      json["VlrTUSD"].replace(",", ".")
-                    );
-                  }
-                  var teMWhValue = parseFloat(json["VlrTE"].replace(",", "."));
-                  if (teMWhValue > maxValueTeFp) {
-                    maxValueTeFp = teMWhValue;
-                  }
-                }
-              }
-            });
-
-            console.log("Valor do kW na TUSD na ponta", tusdKwValueP);
-            console.log("Valor do kW na TUSD Fora ponta", tusdKwValueFp);
-            console.log("Valor do MWh na TUSD na ponta", tusdMWhValueP);
-            console.log("Valor do MWh na TUSD Fora ponta", tusdMWhValueFp);
-            console.log("Valor do MWh na TE na Ponta: ", maxValueTeP);
-            console.log("Valor do MWh na TE Fora Ponta: ", maxValueTeFp);
-
-            console.log("Jsons válidos para busca: ", resultadosFiltrados);
-            return resultadosFiltrados;
-          }
-
-          function getLivreProfile() {
-            return resultadosFiltrados;
-          }
-        })
-
-        .catch((error) => {
-          console.error("Erro ao carregar JSON:", error);
-        });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const seletor = document.getElementById("custo-adicional");
-        const txtcp = document.getElementById("custo-value");
-
-        seletor.addEventListener("change", function () {
-          if (this.value === "sim") {
-            txtcp.disabled = false;
-          } else {
-            txtcp.disabled = true;
-          }
-        });
-      });
-    </script>
   </body>
 </html>
