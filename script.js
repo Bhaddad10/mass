@@ -64,6 +64,7 @@ function extractParametersFromURL() {
   var livreMwhTusdValueFp = urlParameters["liv-mwh-tusd-value-fp"];
   var livreMwhTeValueP = urlParameters["liv-mwh-te-value-p"];
   var livreMwhTeValueFp = urlParameters["liv-mwh-te-value-fp"];
+  var descontoEnergia = urlParameters["desconto-energia"];
 
   //console.log(catMwhTusdValueP);
   preencherTabela(
@@ -82,7 +83,22 @@ function extractParametersFromURL() {
     pisCofins,
     impostos,
     icmsNaTusd,
-    modalidade
+    modalidade,
+    livreKwTusdValueP,
+    livreKwTusdValueFp,
+    livreMwhTusdValueP,
+    livreMwhTusdValueFp,
+    livreMwhTeValueP,
+    livreMwhTeValueFp,
+    perdas,
+    custoAdicional,
+    custoAdicionalValue,
+    modalidadeAcl,
+    tensaoAcl,
+    tensao,
+    distribuidora,
+    descontoEnergia,
+    precoEnergia
   );
   // Agora você pode usar essas variáveis conforme necessário na página "result.html".
 }
@@ -103,9 +119,24 @@ function preencherTabela(
   pisCofins,
   impostos,
   icmsNaTusd,
-  modalidade
+  modalidade,
+  livreKwTusdValueP,
+  livreKwTusdValueFp,
+  livreMwhTusdValueP,
+  livreMwhTusdValueFp,
+  livreMwhTeValueP,
+  livreMwhTeValueFp,
+  perdas,
+  custoAdicional,
+  custoAdicionalValue,
+  modalidadeAcl,
+  tensaoAcl,
+  tensao,
+  distribuidora,
+  descontoEnergia,
+  precoEnergia
 ) {
-  console.log(tusdMwhValuep);
+  //Preencher tabela de consumidor cativo
   //Demanda Tusd Ponta
   var catTusdDemandaPonta = document.getElementById("cat-tusd-demanda-ponta");
   var catKwValueP = document.getElementById("cat-kw-value-p");
@@ -165,6 +196,7 @@ function preencherTabela(
     catKwFinalValueP.textContent =
       "R$ " + (maiorDemanda * maiorTarifa).toLocaleString("pt-BR");
   } else {
+    catDemandaPontaValue = demandaPonta * tusdKwValueP;
     catTusdDemandaPonta.textContent = demandaPonta + " kW";
     catKwValueP.textContent = tusdKwValueP.replace(".", ",") + " R$/kW";
     catKwFinalValueP.textContent =
@@ -242,7 +274,7 @@ function preencherTabela(
     catBandMwh.textContent =
       aux3.toFixed(2).toString().replace(".", ",") + " MWh";
     catBandMwhValue.textContent =
-      "R$ " + vermelhap1.toString().replace(".", ",") + " R$/MWh";
+      vermelhap1.toString().replace(".", ",") + " R$/MWh";
     catBandFinalValue.textContent =
       "R$ " + (aux3 * vermelhap1).toLocaleString("pt-BR");
   } else if (bandeira == "Vermelha P2") {
@@ -254,7 +286,7 @@ function preencherTabela(
     catBandMwh.textContent =
       aux3.toFixed(2).toString().replace(".", ",") + " MWh";
     catBandMwhValue.textContent =
-      "R$ " + vermelhap2.toString().replace(".", ",") + " R$/MWh";
+      vermelhap2.toString().replace(".", ",") + " R$/MWh";
     catBandFinalValue.textContent =
       "R$ " + (aux3 * vermelhap2).toLocaleString("pt-BR");
   }
@@ -321,7 +353,159 @@ function preencherTabela(
     finalImpostosValue;
 
   valorTotal.textContent = "R$ " + totalCativo.toLocaleString("pt-BR");
-  //console.log(demandaPonta, demandaForaPonta, consumoPonta, consumoForaPonta);
+
+  //Preencher tabela de consumidor livre
+  //Demanda Ponta
+  var lvreDemandaPontaValue = demandaPonta * livreKwTusdValueP;
+  var livreTusdKwDemandaPonta = document.getElementById(
+    "livre-tusd-demanda-ponta"
+  );
+  livreTusdKwDemandaPonta.textContent = demandaPonta;
+  var livreTusdKwDemandaPontaValue = document.getElementById(
+    "livre-tusd-kw-dp-value"
+  );
+  livreTusdKwDemandaPontaValue.textContent = livreKwTusdValueP;
+  var livreTusdKwDemandaPontaFinalValue = document.getElementById(
+    "livre-tusd-kw-dp-final-value"
+  );
+  livreTusdKwDemandaPontaFinalValue.textContent = lvreDemandaPontaValue;
+  //Desconto demanda ponta
+  var tarifaDescontoDemandaPonta = (livreKwTusdValueP * descontoEnergia) / 100;
+  var descontoDemandaPonta = demandaPonta * tarifaDescontoDemandaPonta;
+  var livreDescTusdKwDemandaPonta = document.getElementById(
+    "livre-tusd-desc-demanda-ponta"
+  );
+  livreDescTusdKwDemandaPonta.textContent = demandaPonta;
+  var livreDescTusdKwDemandaPontaValue = document.getElementById(
+    "livre-tusd-kw-dp-desc"
+  );
+  livreDescTusdKwDemandaPontaValue.textContent = tarifaDescontoDemandaPonta;
+  var livreDescTusdKwDemandaPontaFinalValue = document.getElementById(
+    "livre-desc-tusd-kw-dp-final-value"
+  );
+  livreDescTusdKwDemandaPontaFinalValue.textContent = -descontoDemandaPonta;
+
+  //Demanda Fora ponta
+  var livreDemandaForaPonta = demandaForaPonta * livreKwTusdValueFp;
+  var livreTusdKwDemandaForaPonta = document.getElementById(
+    "livre-tusd-demanda-fora-ponta"
+  );
+  livreTusdKwDemandaForaPonta.textContent = demandaForaPonta;
+  var livreTusdKwDemandaForaPontaValue =
+    document.getElementById("livre-tusd-kw-dfp");
+  livreTusdKwDemandaForaPontaValue.textContent = livreKwTusdValueFp;
+  var livreTusdKwDemandaForaPontaFinalValue = document.getElementById(
+    "livre-tusd-kw-dfp-final-value"
+  );
+  livreTusdKwDemandaForaPontaFinalValue.textContent = livreDemandaForaPonta;
+  //Desconto demanda fora ponta
+  var tarifaDescontoDemandaForaPonta =
+    (livreKwTusdValueFp * descontoEnergia) / 100;
+  var descontoDemandaForaPonta =
+    demandaForaPonta * tarifaDescontoDemandaForaPonta;
+  var livreDescTusdKwDemandaForaPonta = document.getElementById(
+    "livre-tusd-desc-demanda-fora-ponta"
+  );
+  livreDescTusdKwDemandaForaPonta.textContent = demandaForaPonta;
+  var livreDescTusdKwDemandaForaPontaValue = document.getElementById(
+    "livre-tusd-kw-dfp-desc"
+  );
+  livreDescTusdKwDemandaForaPontaValue.textContent =
+    tarifaDescontoDemandaForaPonta;
+  var livreDescTusdKwDemandaForaPontaFinalValue = document.getElementById(
+    "livre-desc-tusd-kw-dfp-final-value"
+  );
+  livreDescTusdKwDemandaForaPontaFinalValue.textContent =
+    -descontoDemandaForaPonta;
+  //Consumo Ponta
+  var livreConsumoPonta = consumoPonta * livreMwhTusdValueP;
+  var livreTusdMwhConsumoPonta = document.getElementById(
+    "livre-tusd-consumo-ponta"
+  );
+  livreTusdMwhConsumoPonta.textContent = consumoPonta;
+  var livreTusdMwhConsumoPontaValue = document.getElementById(
+    "livre-tusd-mwh-p-value"
+  );
+  livreTusdMwhConsumoPontaValue.textContent = livreMwhTusdValueP;
+  var livreTusdMwhConsumoPontaValueFinalValue = document.getElementById(
+    "livre-tusd-mwh-p-final-value"
+  );
+  livreTusdMwhConsumoPontaValueFinalValue.textContent = livreConsumoPonta;
+  //Consumo Fora ponta
+  var livreConsumoForaPonta = consumoForaPonta * livreMwhTusdValueFp;
+  var livreMwhConsumoForaPonta = document.getElementById(
+    "livre-tusd-consumo-fora-ponta"
+  );
+  livreMwhConsumoForaPonta.textContent = consumoForaPonta;
+  var livreMwhConsumoForaPontaValue = document.getElementById(
+    "livre-tusd-mwh-fp-value"
+  );
+  livreMwhConsumoForaPontaValue.textContent = livreMwhTusdValueFp;
+  var livreMwhConsumoForaPontaFinalValue = document.getElementById(
+    "livre-tusd-mwh-fp-final-value"
+  );
+  livreMwhConsumoForaPontaFinalValue.textContent = livreConsumoForaPonta;
+  //Desconto tusd encargo ponta
+  var livreMwhDescontoEncargoPonta;
+  var livreMwhDescontoEncargoPontaValue;
+  var livreMwhDescontoEncargoPontaFinalValue;
+  //Custo ccee
+  var montanteCustoCcee =
+    (consumoPonta * 1 + consumoForaPonta * 1) * (1 + perdas / 100);
+  var tarifaCustoCcee = precoEnergia * (1 - 9.25 / 100);
+  var livreCustoCcee = document.getElementById("custo-ccee-consumo");
+  livreCustoCcee.textContent = montanteCustoCcee;
+  var livreCustoCceeValue = document.getElementById("custo-ccee-tarifa");
+  livreCustoCceeValue.textContent = 35;
+  var livreCustoCceeFinalValue = document.getElementById(
+    "custo-cee-final-value"
+  );
+  livreCustoCceeFinalValue.textContent = montanteCustoCcee * 35;
+  //Energia livre
+  var energiaLivre = montanteCustoCcee * tarifaCustoCcee;
+  var livreEnergiaLivre = document.getElementById("energia-livre-consumo");
+  livreEnergiaLivre.textContent = montanteCustoCcee;
+  var livreEnergiaLivreValue = document.getElementById("energia-livre-tarifa");
+  livreEnergiaLivreValue.textContent = tarifaCustoCcee;
+  var livreEnergiaLivreFinalValue = document.getElementById(
+    "energia-livre-final-value"
+  );
+  livreEnergiaLivreFinalValue.textContent = energiaLivre;
+
+  //Imposto energia livre
+  var livreImpostoEnergiaLivreValue =
+    document.getElementById("imposto-el-value");
+  livreImpostoEnergiaLivreValue.textContent =
+    ((energiaLivre / (1 - 9.25 / 100)) * 9.25) / 100 +
+    ((energiaLivre / (1 - 9.25 / 100) / (1 - icms / 100)) * icms) / 100;
+
+  //Imposto energia livre distribuidora
+  //Com icms na tusd
+  var livreImpostoEnergiaLivreDistribuidoraValue =
+    document.getElementById("imposto-eld-value");
+
+  livreImpostoEnergiaLivreDistribuidoraValue.textContent =
+    (lvreDemandaPontaValue +
+      -descontoDemandaPonta +
+      livreDemandaForaPonta +
+      -descontoDemandaForaPonta +
+      livreConsumoPonta +
+      livreConsumoForaPonta) /
+      (1 - icms / 100 - pisCofins / 100) -
+    (lvreDemandaPontaValue +
+      -descontoDemandaPonta +
+      livreDemandaForaPonta +
+      -descontoDemandaForaPonta +
+      livreConsumoPonta +
+      livreConsumoForaPonta);
+    //Sem icms na tusd
+
+  //acessoria
+  var acessoriaValue = document.getElementById("acessoria-value");
+  acessoriaValue.textContent = custoAdicionalValue;
+
+  //Total Livre
+  var totalLivre;
 }
 
 function getInputs() {
@@ -347,6 +531,7 @@ function getInputs() {
   inpAnosProjetados = document.getElementById("qtd-anos").value;
   inpMediaPrecoEnergia = document.getElementById("media-preco-energia").value;
   inpBandeiraTarifaria = document.getElementById("bandeira").value;
+  inpDescontoEnergia = document.getElementById("desconto-energia").value;
   var nextUrl =
     "result.html?" +
     "distribuidora=" +
@@ -420,7 +605,9 @@ function getInputs() {
     "&liv-mwh-te-value-p=" +
     encodeURIComponent(livreMwhTeValueP) +
     "&liv-mwh-te-value-fp=" +
-    encodeURIComponent(livreMwhTeValueFp);
+    encodeURIComponent(livreMwhTeValueFp) +
+    "&desconto-energia=" +
+    encodeURIComponent(inpDescontoEnergia);
   // Redirecionar o usuário para a nova página com os parâmetros
   window.location.href = nextUrl;
 }
