@@ -28,13 +28,13 @@
       }
       /* Estilo para o canvas do gráfico */
       #grafico {
-        max-width: 100%;
+        max-width: 150%;
       }
 
       table {
         background-color: white;
         margin: 0 auto;
-        width: 40%;
+        width: 50%;
       }
     </style>
   </head>
@@ -57,47 +57,77 @@
       <label for="table-cativo">Simulação Fatura - Consumidor Cativo</label>
     </h2>
     <br />
-    <table border="1">
+    <table border="1" id="tabela-cativo">
       <thead style="text-align: center">
         <th>Item</th>
         <th>Montante</th>
         <th>Tarifa</th>
         <th>Valor</th>
       </thead>
-      <tbody style="text-align: left">
+      <tbody style="text-align: ce">
         <tr>
-          <td>1. TUSD Demanda</td>
+          <td style="text-align: left">1. TUSD Demanda Ponta</td>
+          <td id="cat-tusd-demanda-ponta"></td>
+          <td id="cat-kw-value-p"></td>
+          <td id="cat-kw-final-valuep"></td>
         </tr>
         <tr>
-          <td>2. TUSD Consumo Ponta</td>
+          <td style="text-align: left">2. TUSD Demanda Fora Ponta</td>
+          <td id="cat-tusd-demanda-fora-ponta"></td>
+          <td id="cat-kw-value-fp"></td>
+          <td id="cat-kw-final-value-fp"></td>
         </tr>
         <tr>
-          <td>3. TUSD Consumo Fora Ponta</td>
+          <td style="text-align: left">3. TUSD Consumo Ponta</td>
+          <td id="cat-tusd-consumo-ponta"></td>
+          <td id="cat-tusd-mwh-p"></td>
+          <td id="cat-mwh-final-value-p"></td>
         </tr>
         <tr>
-          <td>4. TE Consumo Ponta</td>
+          <td style="text-align: left">4. TUSD Consumo Fora Ponta</td>
+          <td id="cat-tusd-consumo-fora-ponta"></td>
+          <td id="cat-tusd-mwh-fp"></td>
+          <td id="cat-mwh-final-value-fp"></td>
         </tr>
         <tr>
-          <td>5. TE Consumo Fora Ponta</td>
+          <td style="text-align: left">5. TE Consumo Ponta</td>
+          <td id="cat-te-consumo-ponta"></td>
+          <td id="cat-te-mwh-p"></td>
+          <td id="cat-te-mwh-final-value-p"></td>
         </tr>
         <tr>
-          <td>6. Bandeira Tarifária</td>
+          <td style="text-align: left">6. TE Consumo Fora Ponta</td>
+          <td id="cat-te-consumo-fora-ponta"></td>
+          <td id="cat-te-mwh-fp"></td>
+          <td id="cat-te-mwh-final-value-fp"></td>
         </tr>
         <tr>
-          <td>7. Impostos</td>
+          <td style="text-align: left">7. Bandeira Tarifária</td>
+          <td id="cat-bandeira-tarifaria"></td>
+          <td id="valor-bandeira-mwh"></td>
+          <td id="final-bandeira-value"></td>
         </tr>
         <tr>
-          <td>8. Total Cativo</td>
+          <td style="text-align: left">8. Impostos</td>
+          <td>-</td>
+          <td>-</td>
+          <td id="impostos"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">9. Total Cativo</td>
+          <td>-</td>
+          <td>-</td>
+          <td id="valor-total"></td>
         </tr>
       </tbody>
     </table>
     <br />
 
     <h2>
-      <label for="table-cativo">Simulação Fatura - Consumidor Livre</label>
+      <label for="table-livre">Simulação Fatura - Consumidor Livre</label>
     </h2>
     <br />
-    <table border="1">
+    <table border="1" id="tabela-livre">
       <thead style="text-align: center">
         <th>Item</th>
         <th>Montante</th>
@@ -106,28 +136,58 @@
       </thead>
       <tbody style="text-align: left">
         <tr>
-          <td>1. TUSD Demanda</td>
+          <td>1. TUSD Demanda Ponta</td>
+          <td id="livre-tusd-demanda-ponta"></td>
+          <td id=""></td>
+          <td></td>
         </tr>
         <tr>
-          <td>2. TUSD Consumo Ponta</td>
+          <td>2. TUSD Demanda Fora Ponta</td>
+          <td id="livre-tusd-demanda-fora-ponta"></td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
-          <td>3. TUSD Consumo Fora Ponta</td>
+          <td>3. TUSD Consumo Ponta</td>
+          <td id="livre-tusd-consumo-ponta"></td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
-          <td>4. TE Consumo Ponta</td>
+          <td>4. TUSD Consumo Fora Ponta</td>
+          <td id="livre-tusd-consumo-fora-ponta"></td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
-          <td>5. TE Consumo Fora Ponta</td>
+          <td>5. TE Consumo Ponta</td>
+          <td id="livre-te-consumo-ponta"></td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
-          <td>6. Bandeira Tarifária</td>
+          <td>6. TE Consumo Fora Ponta</td>
+          <td id="livre-te-consumo-fora-ponta"></td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
-          <td>7. Impostos</td>
+          <td>7. Bandeira Tarifária</td>
+          <td id="bandeira"></td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
-          <td>8. Total Cativo</td>
+          <td>8. Impostos</td>
+          <td id="inpostos"></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>9. Total Cativo</td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       </tbody>
     </table>
@@ -136,7 +196,7 @@
     <h2><label>Exemplo de gráfico</label><br /></h2>
     <br />
     <div id="grafico-container">
-      <canvas id="grafico"></canvas>
+      <canvas id="grafico" width="400" height="300"></canvas>
     </div>
 
     <main></main>
@@ -146,33 +206,33 @@
     </footer>
 
     <script>
-      const ctx = document.getElementById("grafico");
+      var cativoTotal = document.getElementById("valor-total").textContent;
+      console.log(cativoTotal);
+      var xValues = ["Cativo", "Livre", "Economia"];
+      var yValues = [cativoTotal, 49, 44]; // Atualize o valor de "Cativo" com cativoTotal
+      var barColors = ["red", "green", "blue"];
 
-      new Chart(ctx, {
+      new Chart("grafico", {
         type: "bar",
         data: {
-          labels: ["Cativo", "Livre", "Economia"],
+          labels: xValues,
           datasets: [
             {
-              label: "",
-              data: [19, 12, 8],
-              borderWidth: 1,
-              backgroundColor: [
-                "rgb(255, 99, 132)",
-                "rgb(54, 162, 235)",
-                "rgb(144, 238, 144)",
-              ],
+              backgroundColor: barColors,
+              data: yValues,
             },
           ],
         },
         options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
+          legend: { display: true },
+          title: {
+            display: true,
+            text: "World Wine Production 2018",
           },
         },
       });
+
+      extractParametersFromURL();
     </script>
   </body>
 </html>
