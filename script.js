@@ -42,6 +42,8 @@ function extractParametersFromURL() {
   var precoEnergia = urlParameters["preco-energia"];
   var custoAdicional = urlParameters["custo-adicional"];
   var custoAdicionalValue = urlParameters["custo-value"];
+  var impostos = urlParameters["imposto"];
+  var icmsNaTusd = urlParameters["icms-na-tusd"];
   var icms = urlParameters["icms"];
   var pisCofins = urlParameters["pis-cofins"];
   var perdas = urlParameters["perdas"];
@@ -63,7 +65,7 @@ function extractParametersFromURL() {
   var livreMwhTeValueP = urlParameters["liv-mwh-te-value-p"];
   var livreMwhTeValueFp = urlParameters["liv-mwh-te-value-fp"];
 
-  console.log(catMwhTusdValueP);
+  //console.log(catMwhTusdValueP);
   preencherTabela(
     demandaPonta,
     catKwTusdValueP,
@@ -77,7 +79,10 @@ function extractParametersFromURL() {
     catMwhTeValueFp,
     bandeira,
     icms,
-    pisCofins
+    pisCofins,
+    impostos,
+    icmsNaTusd,
+    modalidade
   );
   // Agora você pode usar essas variáveis conforme necessário na página "result.html".
 }
@@ -95,7 +100,10 @@ function preencherTabela(
   teMwhValueFp,
   bandeira,
   icms,
-  pisCofins
+  pisCofins,
+  impostos,
+  icmsNaTusd,
+  modalidade
 ) {
   console.log(tusdMwhValuep);
   //Demanda Tusd Ponta
@@ -147,17 +155,29 @@ function preencherTabela(
   var valorTotal = document.getElementById("valor-total");
   //Demanda tusd
   //Demanda ponta
-  var catDemandaPontaValue = parseFloat(demandaPonta * tusdKwValueP);
-  catTusdDemandaPonta.textContent = demandaPonta + " kW";
-  catKwValueP.textContent = tusdKwValueP.replace(".", ",") + " R$/kW";
-  catKwFinalValueP.textContent =
-    "R$ " + (demandaPonta * tusdKwValueP).toLocaleString("pt-BR");
+  if (modalidade == "Verde") {
+    var maiorDemanda = Math.max(demandaPonta, demandaForaPonta);
+    var maiorTarifa = Math.max(tusdKwValueP, tusdKwValueFp);
+    var catDemandaPontaValue = parseFloat(maiorDemanda * maiorTarifa);
+    catTusdDemandaPonta.textContent = maiorDemanda + " kW";
+    catKwValueP.textContent =
+      maiorTarifa.toString().replace(".", ",") + " R$/kW";
+    catKwFinalValueP.textContent =
+      "R$ " + (maiorDemanda * maiorTarifa).toLocaleString("pt-BR");
+  } else {
+    catTusdDemandaPonta.textContent = demandaPonta + " kW";
+    catKwValueP.textContent = tusdKwValueP.replace(".", ",") + " R$/kW";
+    catKwFinalValueP.textContent =
+      "R$ " + (demandaPonta * tusdKwValueP).toLocaleString("pt-BR");
+  }
+
   //Demanda fora ponta
   var CatDemandaForaPontaValue = 0;
-  if (demandaForaPonta == "") {
+  if (tusdKwValueFp == 0) {
     catTusdDemandaForaPonta.textContent = "-";
     catKwValueFp.textContent = "-";
     catKwFinalValueFp.textContent = "-";
+    CatDemandaForaPontaValue = 0;
   } else {
     catTusdDemandaForaPonta.textContent = demandaForaPonta + " kW";
     catKwValueFp.textContent = tusdKwValueFp.replace(".", ",") + " R$/kW";
@@ -240,28 +260,54 @@ function preencherTabela(
   }
 
   //Impostos
-  //Sem icms na tusd
-  impostoValue.textContent =
-    "R$ " +
-    (
-      (catDemandaPontaValue +
-        CatDemandaForaPontaValue +
-        catConsumoPontaValue +
-        catConsumoForaPontaValue) /
-        (1 - pisCofins / 100) +
-      (catConsumoTePontaValue + catConsumoForaPontaValue + finalBandeiraValue) /
-        (1 - icms / 100 - pisCofins / 100) -
-      (catDemandaPontaValue +
-        CatDemandaForaPontaValue +
-        catConsumoPontaValue +
-        catConsumoForaPontaValue +
-        catConsumoTePontaValue +
-        catConsumoForaPontaValue +
-        finalBandeiraValue)
-    ).toLocaleString("pt-BR");
-
-  //Com ICMS na TUSD
-  //(((catDemandaPontaValue + catDemandaForaPontaValue + catConsumoPontaValue + catConsumoForaPontaValue + catConsumoTePontaValue + catConsumoTeForaPontaValuex + finalBandeiraValue) / (1 - icms / 100 -pisCofins / 100)))
+  var finalImpostosValue = 0;
+  if (impostos == "Sem impostos") {
+    finalImpostosValue = 0;
+    impostoValue.textContent = "-";
+  } else if (impostos == "Com impostos") {
+    if (icmsNaTusd == "Sim") {
+      //Com icms na tusd
+      finalImpostosValue =
+        (catDemandaPontaValue +
+          CatDemandaForaPontaValue +
+          catConsumoPontaValue +
+          catConsumoForaPontaValue +
+          catConsumoTePontaValue +
+          catConsumoTeForaPontaValue +
+          finalBandeiraValue) /
+          (1 - icms / 100 - pisCofins / 100) -
+        (catDemandaPontaValue +
+          CatDemandaForaPontaValue +
+          catConsumoPontaValue +
+          catConsumoForaPontaValue +
+          catConsumoTePontaValue +
+          catConsumoTeForaPontaValue +
+          finalBandeiraValue);
+      impostoValue.textContent =
+        "R$ " + finalImpostosValue.toLocaleString("pt-BR");
+    } else if (icmsNaTusd == "Não") {
+      //Sem icms na TUSD
+      finalImpostosValue =
+        (catDemandaPontaValue +
+          CatDemandaForaPontaValue +
+          catConsumoPontaValue +
+          catConsumoForaPontaValue) /
+          (1 - pisCofins / 100) +
+        (catConsumoTePontaValue +
+          catConsumoTeForaPontaValue +
+          finalBandeiraValue) /
+          (1 - icms / 100 - pisCofins / 100) -
+        (catDemandaPontaValue +
+          CatDemandaForaPontaValue +
+          catConsumoPontaValue +
+          catConsumoForaPontaValue +
+          catConsumoTePontaValue +
+          catConsumoTeForaPontaValue +
+          finalBandeiraValue);
+      impostoValue.textContent =
+        "R$ " + finalImpostosValue.toLocaleString("pt-BR");
+    }
+  }
 
   //Calculo de valor total
   var totalCativo =
@@ -271,7 +317,8 @@ function preencherTabela(
     catConsumoForaPontaValue +
     catConsumoTePontaValue +
     catConsumoTeForaPontaValue +
-    finalBandeiraValue;
+    finalBandeiraValue +
+    finalImpostosValue;
 
   valorTotal.textContent = "R$ " + totalCativo.toLocaleString("pt-BR");
   //console.log(demandaPonta, demandaForaPonta, consumoPonta, consumoForaPonta);
@@ -291,6 +338,8 @@ function getInputs() {
   inpPrecoEnergia = document.getElementById("preco-energia").value;
   inpCustoAdicional = document.getElementById("custo-adicional").value;
   inpCustoAdicionalValue = document.getElementById("custo-value").value;
+  inpImpostos = document.getElementById("impostos").value;
+  inpIcmsNaTusd = document.getElementById("icms-na-tusd").value;
   inpIcms = document.getElementById("icms").value;
   inpPisCofins = document.getElementById("pis-cofins").value;
   inpPerdas = document.getElementById("perdas").value;
@@ -328,6 +377,10 @@ function getInputs() {
     encodeURIComponent(inpCustoAdicional) +
     "&custo-value=" +
     encodeURIComponent(inpCustoAdicionalValue) +
+    "&imposto=" +
+    encodeURIComponent(inpImpostos) +
+    "&icms-na-tusd=" +
+    encodeURIComponent(inpIcmsNaTusd) +
     "&icms=" +
     encodeURIComponent(inpIcms) +
     "&pis-cofins=" +
@@ -380,6 +433,8 @@ var inpTensao;
 var inpTensaoAcl;
 var inpCustoAdicional;
 var inpBandeiraTarifaria;
+var inpImpostos;
+var inpIcmsNaTusd;
 
 //Variaveis inputadas por texto
 var inpDemandaPonta = 0;
@@ -428,8 +483,12 @@ if (window.location.href.endsWith("simulador.html")) {
     const seletorCustoAdicional = document.getElementById("custo-adicional");
     const campoCustoValue = document.getElementById("custo-value");
     const selectBandeira = document.getElementById("bandeira");
+    const selectImpostos = document.getElementById("impostos");
+    const inpIcmsNaTusd = document.getElementById("icms-na-tusd");
+    const inpicms = document.getElementById("icms");
+    const inppiscofins = document.getElementById("pis-cofins");
 
-    const url = "http://127.0.0.1:5000/teste";
+    const url = "https://mass-api.onrender.com/distribuidorasInfo";
 
     function populateSelect(selectElement, data, key) {
       var uniqueValues = [...new Set(data.map((item) => item[key]))];
@@ -481,6 +540,18 @@ if (window.location.href.endsWith("simulador.html")) {
             optionAcl.text = value;
             selectTensaoAcl.add(optionAcl);
           });
+        });
+
+        selectImpostos.addEventListener("change", function () {
+          if (this.value === "Com impostos") {
+            inpIcmsNaTusd.disabled = false;
+            inpicms.disabled = false;
+            inppiscofins.disabled = false;
+          } else {
+            inpIcmsNaTusd.disabled = true;
+            inpicms.disabled = true;
+            inppiscofins.disabled = true;
+          }
         });
 
         seletorCustoAdicional.addEventListener("change", function () {
@@ -546,12 +617,6 @@ if (window.location.href.endsWith("simulador.html")) {
         });
 
         selectModalidade.addEventListener("change", function () {
-          if (selectModalidade.value == "Verde") {
-            inputDFP.disabled = true;
-          } else {
-            inputDFP.disabled = false;
-          }
-
           getCativoProfile();
         });
 
@@ -746,14 +811,14 @@ if (window.location.href.endsWith("simulador.html")) {
 
           inpDistribuidora = distribuidora;
           inpModalidade = modalidade;
-          inptensao = tensao;
+          inpTensao = tensao;
           livreDscReh = distDscReh;
 
           livreKwTusdValueP = tusdKwValueP;
           livreKwTusdValueFp = tusdKwValueFp;
           livreMwhTusdValueP = tusdMWhValueP;
           livreMwhTusdValueFp = tusdMWhValueFp;
-          livreMwhTeValuep = maxValueTeP;
+          livreMwhTeValueP = maxValueTeP;
           livreMwhTeValueFp = maxValueTeFp;
 
           console.log("Valor do kW na TUSD na ponta", tusdKwValueP);
@@ -769,7 +834,7 @@ if (window.location.href.endsWith("simulador.html")) {
             livreKwTusdValueFp,
             livreMwhTusdValueP,
             livreMwhTusdValueFp,
-            livreMwhTeValuep,
+            livreMwhTeValueP,
             livreMwhTeValueFp
           );
 
