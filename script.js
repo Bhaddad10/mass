@@ -445,10 +445,24 @@ function preencherTabela(
     "livre-tusd-mwh-fp-final-value"
   );
   livreMwhConsumoForaPontaFinalValue.textContent = livreConsumoForaPonta;
+
   //Desconto tusd encargo ponta
-  var livreMwhDescontoEncargoPonta;
-  var livreMwhDescontoEncargoPontaValue;
-  var livreMwhDescontoEncargoPontaFinalValue;
+  var livreMwhDescontoEncargoPonta = document.getElementById(
+    "livre-tusd-mwh-encargo"
+  );
+  livreMwhDescontoEncargoPonta.textContent = consumoPonta;
+  var livreMwhDescontoEncargoPontaValue = document.getElementById(
+    "livre-tusd-encargo-mwh-value"
+  );
+  var tarifaDescontoEncargo =
+    ((tusdMwhValuep - tusdMWhValueFp) * descontoEnergia) / 100;
+  livreMwhDescontoEncargoPontaValue.textContent = tarifaDescontoEncargo;
+  var livreMwhDescontoEncargoPontaFinalValue = document.getElementById(
+    "livre-tusd-encargo-mwh-final-value"
+  );
+  var descontoEncargo = consumoPonta * tarifaDescontoEncargo;
+  livreMwhDescontoEncargoPontaFinalValue.textContent = descontoEncargo;
+
   //Custo ccee
   var montanteCustoCcee =
     (consumoPonta * 1 + consumoForaPonta * 1) * (1 + perdas / 100);
@@ -460,7 +474,8 @@ function preencherTabela(
   var livreCustoCceeFinalValue = document.getElementById(
     "custo-cee-final-value"
   );
-  livreCustoCceeFinalValue.textContent = montanteCustoCcee * 35;
+  var custoTotalCcee = montanteCustoCcee * 35;
+  livreCustoCceeFinalValue.textContent = custoTotalCcee;
   //Energia livre
   var energiaLivre = montanteCustoCcee * tarifaCustoCcee;
   var livreEnergiaLivre = document.getElementById("energia-livre-consumo");
@@ -473,39 +488,68 @@ function preencherTabela(
   livreEnergiaLivreFinalValue.textContent = energiaLivre;
 
   //Imposto energia livre
-  var livreImpostoEnergiaLivreValue =
-    document.getElementById("imposto-el-value");
-  livreImpostoEnergiaLivreValue.textContent =
+  var impEnergiaLivre =
     ((energiaLivre / (1 - 9.25 / 100)) * 9.25) / 100 +
     ((energiaLivre / (1 - 9.25 / 100) / (1 - icms / 100)) * icms) / 100;
+  var livreImpostoEnergiaLivreValue =
+    document.getElementById("imposto-el-value");
+  livreImpostoEnergiaLivreValue.textContent = impEnergiaLivre;
 
   //Imposto energia livre distribuidora
-  //Com icms na tusd
+  //Sem icms na tusd
   var livreImpostoEnergiaLivreDistribuidoraValue =
     document.getElementById("imposto-eld-value");
-
-  livreImpostoEnergiaLivreDistribuidoraValue.textContent =
-    (lvreDemandaPontaValue +
-      -descontoDemandaPonta +
-      livreDemandaForaPonta +
-      -descontoDemandaForaPonta +
-      livreConsumoPonta +
-      livreConsumoForaPonta) /
-      (1 - icms / 100 - pisCofins / 100) -
-    (lvreDemandaPontaValue +
-      -descontoDemandaPonta +
-      livreDemandaForaPonta +
-      -descontoDemandaForaPonta +
-      livreConsumoPonta +
-      livreConsumoForaPonta);
-    //Sem icms na tusd
-
+  var impEnergiaLivreDist = 0;
+  if (icmsNaTusd == "Não") {
+    impEnergiaLivreDist =
+      (lvreDemandaPontaValue +
+        -descontoDemandaPonta +
+        livreDemandaForaPonta +
+        -descontoDemandaForaPonta +
+        livreConsumoPonta +
+        livreConsumoForaPonta) /
+        (1 - icms / 100) -
+      (lvreDemandaPontaValue +
+        -descontoDemandaPonta +
+        livreDemandaForaPonta +
+        -descontoDemandaForaPonta +
+        livreConsumoPonta +
+        livreConsumoForaPonta);
+  } else {
+    impEnergiaLivreDist =
+      (lvreDemandaPontaValue +
+        -descontoDemandaPonta +
+        livreDemandaForaPonta +
+        -descontoDemandaForaPonta +
+        livreConsumoPonta +
+        livreConsumoForaPonta) /
+        (1 - icms / 100 - pisCofins / 100) -
+      (lvreDemandaPontaValue +
+        -descontoDemandaPonta +
+        livreDemandaForaPonta +
+        -descontoDemandaForaPonta +
+        livreConsumoPonta +
+        livreConsumoForaPonta);
+  }
+  livreImpostoEnergiaLivreDistribuidoraValue.textContent = impEnergiaLivreDist;
   //acessoria
   var acessoriaValue = document.getElementById("acessoria-value");
   acessoriaValue.textContent = custoAdicionalValue;
 
   //Total Livre
-  var totalLivre;
+  var totalLivre = document.getElementById("total-livre");
+  totalLivre.textContent =
+    lvreDemandaPontaValue +
+    -descontoDemandaPonta +
+    livreDemandaForaPonta +
+    -descontoDemandaForaPonta +
+    livreConsumoPonta +
+    livreConsumoForaPonta +
+    -descontoEncargo +
+    custoTotalCcee +
+    energiaLivre +
+    impEnergiaLivre +
+    impEnergiaLivreDist;
 }
 
 function getInputs() {
