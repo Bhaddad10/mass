@@ -53,9 +53,14 @@
 
     <h2>Resultados</h2>
     <br /><br />
+    
     <h2>
       <label for="table-cativo">Simulação Fatura - Consumidor Cativo</label>
     </h2>
+    <h3>Premissas:</h3>
+    <h3>Perfil Cativo: <span id="perfil-cativo"></span> - <span id="modalidade-cativo"></span></h3>
+    <h3>Bandeira Tarifária: <span id="bandeira-tarifaria"></span></h3>
+    <h3>Tarifa Utilizada: <span id="distribuidora"></span> - <span id="resolucao"></span></h3>
     <br />
     <table border="1" id="tabela-cativo">
       <thead style="text-align: center">
@@ -126,6 +131,10 @@
     <h2>
       <label for="table-livre">Simulação Fatura - Consumidor Livre</label>
     </h2>
+    <h3>Premissas:</h3>
+    <h3>Perfil Cativo: <span id="perfil-livre"></span> - <span id="modalidade-livre"></span></h3>
+    <h3>Bandeira Tarifária: <span id="bandeira-tarifaria-livre"></span></h3>
+    <h3>Tarifa Utilizada: <span id="distribuidora-livre"></span> - <span id="resolucao-livre"></span></h3>
     <br />
     <table border="1" id="tabela-livre">
       <thead style="text-align: center">
@@ -134,60 +143,84 @@
         <th>Tarifa</th>
         <th>Valor</th>
       </thead>
-      <tbody style="text-align: left">
+      <tbody style="text-align: center">
         <tr>
-          <td>1. TUSD Demanda Ponta</td>
+          <td style="text-align: left">1. TUSD Demanda Ponta</td>
           <td id="livre-tusd-demanda-ponta"></td>
-          <td id=""></td>
-          <td></td>
+          <td id="livre-tusd-kw-dp-value"></td>
+          <td id="livre-tusd-kw-dp-final-value"></td>
         </tr>
         <tr>
-          <td>2. TUSD Demanda Fora Ponta</td>
+          <td style="text-align: left">2. Desc TUSD Demanda Ponta</td>
+          <td id="livre-tusd-desc-demanda-ponta"></td>
+          <td id="livre-tusd-kw-dp-desc"></td>
+          <td id="livre-desc-tusd-kw-dp-final-value"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">3. TUSD Demanda Fora Ponta</td>
           <td id="livre-tusd-demanda-fora-ponta"></td>
-          <td></td>
-          <td></td>
+          <td id="livre-tusd-kw-dfp"></td>
+          <td id="livre-tusd-kw-dfp-final-value"></td>
         </tr>
         <tr>
-          <td>3. TUSD Consumo Ponta</td>
+          <td style="text-align: left">4. Desc TUSD Demanda Fora Ponta</td>
+          <td id="livre-tusd-desc-demanda-fora-ponta"></td>
+          <td id="livre-tusd-kw-dfp-desc"></td>
+          <td id="livre-desc-tusd-kw-dfp-final-value"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">5. TUSD Consumo Ponta</td>
           <td id="livre-tusd-consumo-ponta"></td>
-          <td></td>
-          <td></td>
+          <td id="livre-tusd-mwh-p-value"></td>
+          <td id="livre-tusd-mwh-p-final-value"></td>
         </tr>
         <tr>
-          <td>4. TUSD Consumo Fora Ponta</td>
+          <td style="text-align: left">6. TUSD Consumo Fora Ponta</td>
           <td id="livre-tusd-consumo-fora-ponta"></td>
-          <td></td>
-          <td></td>
+          <td id="livre-tusd-mwh-fp-value"></td>
+          <td id="livre-tusd-mwh-fp-final-value"></td>
         </tr>
         <tr>
-          <td>5. TE Consumo Ponta</td>
-          <td id="livre-te-consumo-ponta"></td>
-          <td></td>
-          <td></td>
+          <td style="text-align: left">7. Desc TUSD Encargo Ponta</td>
+          <td id="livre-tusd-mwh-encargo"></td>
+          <td id="livre-tusd-encargo-mwh-value"></td>
+          <td id="livre-tusd-encargo-mwh-final-value"></td>
         </tr>
         <tr>
-          <td>6. TE Consumo Fora Ponta</td>
-          <td id="livre-te-consumo-fora-ponta"></td>
-          <td></td>
-          <td></td>
+          <td style="text-align: left">8. Custos CCEE</td>
+          <td id="custo-ccee-consumo"></td>
+          <td id="custo-ccee-tarifa"></td>
+          <td id="custo-cee-final-value"></td>
         </tr>
         <tr>
-          <td>7. Bandeira Tarifária</td>
-          <td id="bandeira"></td>
-          <td></td>
-          <td></td>
+          <td style="text-align: left">9. Energia Livre</td>
+          <td id="energia-livre-consumo"></td>
+          <td id="energia-livre-tarifa"></td>
+          <td id="energia-livre-final-value"></td>
         </tr>
         <tr>
-          <td>8. Impostos</td>
-          <td id="inpostos"></td>
+          <td style="text-align: left">10. Impostos Energia Livre</td>
           <td></td>
           <td></td>
+          <td id="imposto-el-value"></td>
         </tr>
         <tr>
-          <td>9. Total Cativo</td>
+          <td style="text-align: left">11. Impostos Energia Livre Distribuidora</td>
           <td></td>
           <td></td>
+          <td id="imposto-eld-value"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">12. Acessoria / Representação</td>
           <td></td>
+          <td></td>
+          <td id="acessoria-value"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">13. Total Livre</td>
+          <td></td>
+          <td></td>
+          <td id="total-livre"></td>
         </tr>
       </tbody>
     </table>
