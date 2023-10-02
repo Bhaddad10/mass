@@ -19,7 +19,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 25%; /* Ajuste a largura conforme necessário */
+        width: 35%; /* Ajuste a largura conforme necessário */
         height: 25; /* Ajuste a altura conforme necessário */
         margin: 0 auto;
         background-color: white; /* Fundo branco */
@@ -53,14 +53,27 @@
 
     <h2>Resultados</h2>
     <br /><br />
-    
+
     <h2>
       <label for="table-cativo">Simulação Fatura - Consumidor Cativo</label>
     </h2>
-    <h3>Premissas:</h3>
-    <h3>Perfil Cativo: <span id="perfil-cativo"></span> - <span id="modalidade-cativo"></span></h3>
-    <h3>Bandeira Tarifária: <span id="bandeira-tarifaria"></span></h3>
-    <h3>Tarifa Utilizada: <span id="distribuidora"></span> - <span id="resolucao"></span></h3>
+    <div style="color: white">
+      <h3>Premissas:</h3>
+      <h3>
+        Perfil Cativo: <span id="perfil-cativo"></span> -
+        <span id="modalidade-cativo"></span>
+      </h3>
+      <h3>Bandeira Tarifária: <span id="bandeira-tarifaria"></span></h3>
+      <h3>
+        Tarifa Utilizada: <span id="distribuidora"></span> -
+        <span id="resolucao"></span>
+      </h3>
+      <h3>
+        Perfil Cativo: <span id="perfil-livre"></span> -
+        <span id="modalidade-livre"></span>
+      </h3>
+    </div>
+
     <br />
     <table border="1" id="tabela-cativo">
       <thead style="text-align: center">
@@ -131,10 +144,6 @@
     <h2>
       <label for="table-livre">Simulação Fatura - Consumidor Livre</label>
     </h2>
-    <h3>Premissas:</h3>
-    <h3>Perfil Cativo: <span id="perfil-livre"></span> - <span id="modalidade-livre"></span></h3>
-    <h3>Bandeira Tarifária: <span id="bandeira-tarifaria-livre"></span></h3>
-    <h3>Tarifa Utilizada: <span id="distribuidora-livre"></span> - <span id="resolucao-livre"></span></h3>
     <br />
     <table border="1" id="tabela-livre">
       <thead style="text-align: center">
@@ -205,7 +214,9 @@
           <td id="imposto-el-value"></td>
         </tr>
         <tr>
-          <td style="text-align: left">11. Impostos Energia Livre Distribuidora</td>
+          <td style="text-align: left">
+            11. Impostos Energia Livre Distribuidora
+          </td>
           <td></td>
           <td></td>
           <td id="imposto-eld-value"></td>
@@ -225,8 +236,52 @@
       </tbody>
     </table>
     <br />
-
-    <h2><label>Exemplo de gráfico</label><br /></h2>
+    <h2>
+      <label>Resultado Auferido</label>
+    </h2>
+    <table border="1" id="tabela-resultado">
+      <thead style="text-align: center">
+        <th>Mensal</th>
+        <th>Valor</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: left">1. Total Cativo</td>
+          <td id="result-total-cativo"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">2. Total Livre</td>
+          <td id="result-total-livre"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">3. Economia Mensal Líquida</td>
+          <td id="economia-mensal"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <table border="1" id="tabela-resultado">
+      <thead style="text-align: center">
+        <th>Anual</th>
+        <th>Valor</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: left">1. Total Cativo</td>
+          <td id="result-total-cativo-anual"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">2. Total Livre</td>
+          <td id="result-total-livre-anual"></td>
+        </tr>
+        <tr>
+          <td style="text-align: left">3. Economia Anual Líquida</td>
+          <td id="economia-mensal-anual"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+    <h2><label>Gráfico De Economia Anual</label><br /></h2>
     <br />
     <div id="grafico-container">
       <canvas id="grafico" width="400" height="300"></canvas>
@@ -239,32 +294,6 @@
     </footer>
 
     <script>
-      var cativoTotal = document.getElementById("valor-total").textContent;
-      console.log(cativoTotal);
-      var xValues = ["Cativo", "Livre", "Economia"];
-      var yValues = [cativoTotal, 49, 44]; // Atualize o valor de "Cativo" com cativoTotal
-      var barColors = ["red", "green", "blue"];
-
-      new Chart("grafico", {
-        type: "bar",
-        data: {
-          labels: xValues,
-          datasets: [
-            {
-              backgroundColor: barColors,
-              data: yValues,
-            },
-          ],
-        },
-        options: {
-          legend: { display: true },
-          title: {
-            display: true,
-            text: "World Wine Production 2018",
-          },
-        },
-      });
-
       extractParametersFromURL();
     </script>
   </body>
