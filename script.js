@@ -667,19 +667,22 @@ function preencherTabela(
     (((totalCativo - livreTotalValue) / totalCativo) * 100).toFixed(0) +
     "%" +
     ")" +
-    "     R$ " +
+    "R$ " +
     (totalCativo - livreTotalValue).toLocaleString(2);
   /////////////////////////
+  var totalCativoAnual = totalCativo * 12;
+  var totalLivreAnual = livreTotalValue * 12;
+  var resultadoAnual = totalCativoAnual - totalLivreAnual;
   var resultTotalCativo = document.getElementById("result-total-cativo-anual");
   resultTotalCativo.textContent = "R$ " + (totalCativo * 12).toLocaleString(2);
   var resultTotalLivre = document.getElementById("result-total-livre-anual");
   resultTotalLivre.textContent =
     "R$ " + (livreTotalValue * 12).toLocaleString(2);
   var economiaMensal = document.getElementById("economia-mensal-anual");
-  economiaMensal.textContent =
-    (totalCativo * 12 - livreTotalValue * 12).toLocaleString(2) +
+  economiaMensal.textContent ="("+
+    ((resultadoAnual / totalCativoAnual) * 100).toFixed(0)+"%)" +
     "R$ " +
-    (totalCativo * 12 - livreTotalValue * 12).toLocaleString(2);
+    resultadoAnual.toLocaleString(2);
   ///////////////////////////////
   totalCativo = totalCativo * 12;
   livreTotalValue = livreTotalValue * 12;
