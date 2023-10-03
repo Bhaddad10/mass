@@ -156,7 +156,20 @@ function preencherTabela(
   perfilLivre.textContent = tensaoAcl;
   var modalidadeLivre = document.getElementById("modalidade-livre");
   modalidadeLivre.textContent = modalidadeAcl;
-
+  var valorEnergia = document.getElementById("valor-energia");
+  valorEnergia.textContent = "R$" + precoEnergia.toLocaleString(2);
+  var icmsValue = document.getElementById("icms-value");
+  icmsValue.textContent = icms + "%";
+  var pisCofinsValue = document.getElementById("pis-cofins-value");
+  pisCofinsValue.textContent = pisCofins + "%";
+  var comSemImpostos = document.getElementById("com-sem-impostos");
+  comSemImpostos.textContent = impostos;
+  var descontoDaEnergia = document.getElementById("desconto-energia");
+  if (descontoEnergia != 0) {
+    descontoDaEnergia.textContent = "Incentivada " + descontoEnergia + "%";
+  } else {
+    descontoDaEnergia.textContent = "Convencional";
+  }
   ////////////////////////////////////////////////////////////////////////
   //Preencher tabela de consumidor cativo
   //Demanda Tusd Ponta
@@ -679,8 +692,10 @@ function preencherTabela(
   resultTotalLivre.textContent =
     "R$ " + (livreTotalValue * 12).toLocaleString(2);
   var economiaMensal = document.getElementById("economia-mensal-anual");
-  economiaMensal.textContent ="("+
-    ((resultadoAnual / totalCativoAnual) * 100).toFixed(0)+"%)" +
+  economiaMensal.textContent =
+    "(" +
+    ((resultadoAnual / totalCativoAnual) * 100).toFixed(0) +
+    "%)" +
     "R$ " +
     resultadoAnual.toLocaleString(2);
   ///////////////////////////////
@@ -697,6 +712,7 @@ function preencherTabela(
       labels: xValues,
       datasets: [
         {
+          label: 'bar',
           backgroundColor: barColors,
           data: yValues,
         },

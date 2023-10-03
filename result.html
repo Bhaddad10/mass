@@ -36,6 +36,11 @@
         margin: 0 auto;
         width: 50%;
       }
+      #div-premissas {
+        text-align: left;
+
+        margin: 0 auto;
+      }
     </style>
   </head>
   <body>
@@ -50,41 +55,50 @@
 
     <nav></nav>
     <br />
-
-    <h2>Resultados</h2>
+    <h1>Resultados</h1>
+    <br />
+    <h2>Premissas:</h2>
+    <br>
+    <div
+      style="color: white; display: flex; justify-content: center"
+      id="div-premissas"
+    >
+      <div style="display: flex; flex-direction: row;">
+        <div id="div1" style="width: 50%">
+          <h3>
+            Perfil Cativo: <span id="perfil-cativo"></span> -
+            <span id="modalidade-cativo"></span>
+          </h3>
+          <h3>Bandeira Tarifária: <span id="bandeira-tarifaria"></span></h3>
+          <h4>
+            Tarifa Utilizada: <span id="distribuidora"></span> -
+            <span id="resolucao"></span>
+          </h4>
+        </div>
+        <br />
+        <div id="div2" style="width: 50%">
+          <h3>
+            Perfil Livre: <span id="perfil-livre"></span> -
+            <span id="modalidade-livre"></span>
+          </h3>
+          <h3>
+            Tipo de energia:
+            <span id="desconto-energia"></span>
+          </h3>
+          <h3>Valor da energia: <span id="valor-energia">valor</span></h3>
+          <h3>
+            Impostos: (ICMS: <span id="icms-value"></span>; PIS/COFINS:
+            <span id="pis-cofins-value"></span>)
+          </h3>
+          <h3>Simulação realizada: <span id="com-sem-impostos"></span></h3>
+        </div>
+      </div>
+    </div>
     <br /><br />
 
     <h2>
       <label for="table-cativo">Simulação Fatura - Consumidor Cativo</label>
     </h2>
-    <div style="color: white">
-      <h3>Premissas:</h3>
-      <h3>
-        Perfil Cativo: <span id="perfil-cativo"></span> -
-        <span id="modalidade-cativo"></span>
-      </h3>
-      <h3>Bandeira Tarifária: <span id="bandeira-tarifaria"></span></h3>
-      <h3>
-        Tarifa Utilizada: <span id="distribuidora"></span> -
-        <span id="resolucao"></span>
-      </h3>
-      <h3>
-        Perfil Cativo: <span id="perfil-livre"></span> -
-        <span id="modalidade-livre"></span>
-      </h3>
-      <h3>
-        Tipo de energia: <span>Incentivada + desconto ou convencional + 0%</span>
-      </h3>
-      <h3>
-        Valor da energia: <span>valor</span>
-      </h3>
-      <h3>
-        Impostos: (ICMS<span> valor</span> PIS/COFINS <span>valor</span>)
-      </h3>
-      <h3>
-        Simulação realizada: <span>com ou sem impostos</span>
-      </h3>
-    </div>
 
     <br />
     <table border="1" id="tabela-cativo">
@@ -271,7 +285,7 @@
         </tr>
       </tbody>
     </table>
-    <br>
+    <br />
     <table border="1" id="tabela-resultado">
       <thead style="text-align: center">
         <th>Anual</th>
