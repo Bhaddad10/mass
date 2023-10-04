@@ -100,7 +100,8 @@ function extractParametersFromURL() {
     descontoEnergia,
     precoEnergia,
     catDscReh,
-    livreDscReh
+    livreDscReh,
+    tipoCalculo
   );
   // Agora você pode usar essas variáveis conforme necessário na página "result.html".
 }
@@ -138,7 +139,8 @@ function preencherTabela(
   descontoEnergia,
   precoEnergia,
   catDscReh,
-  livreDscReh
+  livreDscReh,
+  tipoCalculo
 ) {
   ///////////////////////////////////////////////////////////////
   var perfilCativo = document.getElementById("perfil-cativo");
@@ -598,43 +600,73 @@ function preencherTabela(
     "R$ " + impEnergiaLivre.toLocaleString(2);
 
   //Imposto energia livre distribuidora
+  /////////////////////////////////////////////Tipo 1
   //Sem icms na tusd
   var livreImpostoEnergiaLivreDistribuidoraValue =
     document.getElementById("imposto-eld-value");
   var impEnergiaLivreDist = 0;
-  if (icmsNaTusd == "Não") {
-    impEnergiaLivreDist =
-      (lvreDemandaPontaValue +
-        -descontoDemandaPonta +
-        livreDemandaForaPonta +
-        -descontoDemandaForaPonta +
-        livreConsumoPonta +
-        livreConsumoForaPonta) /
-        (1 - icms / 100) -
-      (lvreDemandaPontaValue +
-        -descontoDemandaPonta +
-        livreDemandaForaPonta +
-        -descontoDemandaForaPonta +
-        livreConsumoPonta +
-        livreConsumoForaPonta);
-  } else {
-    impEnergiaLivreDist =
-      (lvreDemandaPontaValue +
-        -descontoDemandaPonta +
-        livreDemandaForaPonta +
-        -descontoDemandaForaPonta +
-        livreConsumoPonta +
-        livreConsumoForaPonta) /
-        (1 - icms / 100 - pisCofins / 100) -
-      (lvreDemandaPontaValue +
-        -descontoDemandaPonta +
-        livreDemandaForaPonta +
-        -descontoDemandaForaPonta +
-        livreConsumoPonta +
-        livreConsumoForaPonta);
+  if (tipoCalculo == "Tipo 1") {
+    if (icmsNaTusd == "Não") {
+      impEnergiaLivreDist =
+        (lvreDemandaPontaValue +
+          -descontoDemandaPonta +
+          livreDemandaForaPonta +
+          -descontoDemandaForaPonta +
+          livreConsumoPonta +
+          livreConsumoForaPonta) /
+          (1 - icms / 100) -
+        (lvreDemandaPontaValue +
+          -descontoDemandaPonta +
+          livreDemandaForaPonta +
+          -descontoDemandaForaPonta +
+          livreConsumoPonta +
+          livreConsumoForaPonta);
+    } else {
+      impEnergiaLivreDist =
+        (lvreDemandaPontaValue +
+          -descontoDemandaPonta +
+          livreDemandaForaPonta +
+          -descontoDemandaForaPonta +
+          livreConsumoPonta +
+          livreConsumoForaPonta) /
+          (1 - icms / 100 - pisCofins / 100) -
+        (lvreDemandaPontaValue +
+          -descontoDemandaPonta +
+          livreDemandaForaPonta +
+          -descontoDemandaForaPonta +
+          livreConsumoPonta +
+          livreConsumoForaPonta);
+    }
+  } //////////////////////////////////////////////////////Tipo2
+  else {
+    if (icmsNaTusd == "Não") {
+      impEnergiaLivreDist =
+        (lvreDemandaPontaValue +
+          livreDemandaForaPonta +
+          livreConsumoPonta +
+          livreConsumoForaPonta) /
+          (1 - icms / 100) -
+        (lvreDemandaPontaValue +
+          livreDemandaForaPonta +
+          livreConsumoPonta +
+          livreConsumoForaPonta);
+    } else {
+      impEnergiaLivreDist =
+        (lvreDemandaPontaValue +
+          livreDemandaForaPonta +
+          livreConsumoPonta +
+          livreConsumoForaPonta) /
+          (1 - icms / 100 - pisCofins / 100) -
+        (lvreDemandaPontaValue +
+          livreDemandaForaPonta +
+          livreConsumoPonta +
+          livreConsumoForaPonta);
+    }
   }
+
   livreImpostoEnergiaLivreDistribuidoraValue.textContent =
     "R$ " + impEnergiaLivreDist.toLocaleString(2);
+
   //acessoria
   var acessoriaValue = document.getElementById("acessoria-value");
   acessoriaValue.textContent =
@@ -712,7 +744,7 @@ function preencherTabela(
       labels: xValues,
       datasets: [
         {
-          label: 'bar',
+          label: "bar",
           backgroundColor: barColors,
           data: yValues,
         },
