@@ -66,7 +66,6 @@ function extractParametersFromURL() {
   var livreMwhTeValueFp = urlParameters["liv-mwh-te-value-fp"];
   var descontoEnergia = urlParameters["desconto-energia"];
 
-  //console.log(catMwhTusdValueP);
   preencherTabela(
     demandaPonta,
     catKwTusdValueP,
@@ -225,7 +224,6 @@ function preencherTabela(
   //Demanda ponta
   if (modalidade == "Verde") {
     var maiorDemanda = Math.max(demandaPonta, demandaForaPonta);
-    console.log(demandaPonta, demandaForaPonta);
     var maiorTarifa = Math.max(tusdKwValueP, tusdKwValueFp);
     var catDemandaPontaValue = parseFloat(maiorDemanda * maiorTarifa);
     catTusdDemandaPonta.textContent = maiorDemanda + " kW";
@@ -413,7 +411,8 @@ function preencherTabela(
 
     livreTusdKwDemandaPonta.textContent = maiorDemanda + " kW";
 
-    livreTusdKwDemandaPontaValue.textContent = maiorTarifa + " R$/kW";
+    livreTusdKwDemandaPontaValue.textContent =
+      maiorTarifa.toFixed(2).replace(".", ",") + " R$/kW";
 
     livreTusdKwDemandaPontaFinalValue.textContent =
       "R$ " + livreDemandaPontaValue.toLocaleString(2);
@@ -452,7 +451,8 @@ function preencherTabela(
     descDemandaPontaValue = parseFloat(maiorDemanda * tarifa);
 
     livreDescTusdKwDemandaPonta.textContent = maiorDemanda + " kW";
-    livreDescTusdKwDemandaPontaValue.textContent = tarifa.toFixed(2) + " R$/kW";
+    livreDescTusdKwDemandaPontaValue.textContent =
+      tarifa.toFixed(2).replace(".", ",") + " R$/kW";
     livreDescTusdKwDemandaPontaFinalValue.textContent =
       "(R$ " + descDemandaPontaValue.toLocaleString(2) + ")";
   } else {
@@ -584,7 +584,7 @@ function preencherTabela(
       "livre-tusd-encargo-mwh-value"
     );
     livreMwhDescontoEncargoPontaValue.textContent =
-      tarifaDescontoEncargo.toLocaleString(2) + " R$/MWh";
+      tarifaDescontoEncargo.toFixed(2).replace(".", ",") + " R$/MWh";
     var livreMwhDescontoEncargoPontaFinalValue = document.getElementById(
       "livre-tusd-encargo-mwh-final-value"
     );
@@ -791,7 +791,7 @@ function preencherTabela(
       labels: xValues,
       datasets: [
         {
-          label: "bar",
+          label: "Cativo",
           backgroundColor: barColors,
           data: yValues,
         },
@@ -801,7 +801,6 @@ function preencherTabela(
       legend: { display: true },
       title: {
         display: true,
-        text: "World Wine Production 2018",
       },
     },
   });
@@ -1130,16 +1129,6 @@ if (window.location.href.endsWith("simulador.html")) {
               json["DscModalidadeTarifaria"] === modalidade
             );
           });
-          console.log("Perfil Cativo");
-          console.log(
-            "Busca: \n Distribuidora: " +
-              distribuidora +
-              " Tensão: " +
-              tensao +
-              " Modalidade Tarifária: " +
-              modalidade
-          );
-
           var maxValueTeP = 0;
           var maxValueTeFp = 0;
 
@@ -1198,24 +1187,6 @@ if (window.location.href.endsWith("simulador.html")) {
           catMwhTeValueP = maxValueTeP;
           catMwhTeValueFp = maxValueTeFp;
 
-          console.log("Valor do kW na TUSD na ponta", tusdKwValueP);
-          console.log("Valor do kW na TUSD Fora ponta", tusdKwValueFp);
-          console.log("Valor do MWh na TUSD na ponta", tusdMWhValueP);
-          console.log("Valor do MWh na TUSD Fora ponta", tusdMWhValueFp);
-          console.log("Valor do MWh na TE na Ponta: ", maxValueTeP);
-          console.log("Valor do MWh na TE Fora Ponta: ", maxValueTeFp);
-
-          console.log(catDscReh);
-          console.log(
-            catKwTusdValueP,
-            catKwTusdValueFp,
-            catMwhTusdValueP,
-            catMwhTusdValueFp,
-            catMwhTeValueP,
-            catMwhTeValueFp
-          );
-
-          console.log("Jsons válidos para busca: ", resultadosFiltrados);
           return resultadosFiltrados;
         }
 
@@ -1239,15 +1210,6 @@ if (window.location.href.endsWith("simulador.html")) {
               json["DscModalidadeTarifaria"] === modalidade
             );
           });
-          console.log("Perfil Livre");
-          console.log(
-            "Busca: \n Distribuidora: " +
-              distribuidora +
-              " Tensão: " +
-              tensao +
-              " Modalidade Tarifária: " +
-              modalidade
-          );
 
           var maxValueTeP = 0;
           var maxValueTeFp = 0;
@@ -1307,24 +1269,6 @@ if (window.location.href.endsWith("simulador.html")) {
           livreMwhTeValueP = maxValueTeP;
           livreMwhTeValueFp = maxValueTeFp;
 
-          console.log("Valor do kW na TUSD na ponta", tusdKwValueP);
-          console.log("Valor do kW na TUSD Fora ponta", tusdKwValueFp);
-          console.log("Valor do MWh na TUSD na ponta", tusdMWhValueP);
-          console.log("Valor do MWh na TUSD Fora ponta", tusdMWhValueFp);
-          console.log("Valor do MWh na TE na Ponta: ", maxValueTeP);
-          console.log("Valor do MWh na TE Fora Ponta: ", maxValueTeFp);
-          console.log(livreDscReh);
-
-          console.log(
-            livreKwTusdValueP,
-            livreKwTusdValueFp,
-            livreMwhTusdValueP,
-            livreMwhTusdValueFp,
-            livreMwhTeValueP,
-            livreMwhTeValueFp
-          );
-
-          console.log("Jsons válidos para busca: ", resultadosFiltrados);
           return resultadosFiltrados;
         }
       })
