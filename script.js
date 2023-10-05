@@ -225,6 +225,7 @@ function preencherTabela(
   //Demanda ponta
   if (modalidade == "Verde") {
     var maiorDemanda = Math.max(demandaPonta, demandaForaPonta);
+    console.log(demandaPonta, demandaForaPonta);
     var maiorTarifa = Math.max(tusdKwValueP, tusdKwValueFp);
     var catDemandaPontaValue = parseFloat(maiorDemanda * maiorTarifa);
     catTusdDemandaPonta.textContent = maiorDemanda + " kW";
@@ -393,40 +394,82 @@ function preencherTabela(
 
   //Preencher tabela de consumidor livre
   //Demanda Ponta
-  var lvreDemandaPontaValue = demandaPonta * livreKwTusdValueP;
   var livreTusdKwDemandaPonta = document.getElementById(
     "livre-tusd-demanda-ponta"
   );
-  livreTusdKwDemandaPonta.textContent = demandaPonta.replace(".", ",") + " kW";
   var livreTusdKwDemandaPontaValue = document.getElementById(
     "livre-tusd-kw-dp-value"
   );
-  livreTusdKwDemandaPontaValue.textContent =
-    livreKwTusdValueP.replace(".", ",") + " R$/kW";
   var livreTusdKwDemandaPontaFinalValue = document.getElementById(
     "livre-tusd-kw-dp-final-value"
   );
-  livreTusdKwDemandaPontaFinalValue.textContent =
-    "R$ " + lvreDemandaPontaValue.toLocaleString(2);
+  var livreDemandaPontaValue = 0;
+  if ((modalidadeAcl = "Verde")) {
+    var maiorDemanda = Math.max(demandaPonta, demandaForaPonta);
+
+    var maiorTarifa = Math.max(livreKwTusdValueP, livreKwTusdValueFp);
+
+    livreDemandaPontaValue = parseFloat(maiorDemanda * maiorTarifa);
+
+    livreTusdKwDemandaPonta.textContent = maiorDemanda + " kW";
+
+    livreTusdKwDemandaPontaValue.textContent = maiorTarifa + " R$/kW";
+
+    livreTusdKwDemandaPontaFinalValue.textContent =
+      "R$ " + livreDemandaPontaValue.toLocaleString(2);
+  } else {
+    livreDemandaPontaValue = demandaPonta * livreKwTusdValueP;
+
+    livreTusdKwDemandaPonta.textContent =
+      demandaPonta.replace(".", ",") + " kW";
+
+    livreTusdKwDemandaPontaValue.textContent =
+      livreKwTusdValueP.replace(".", ",") + " R$/kW";
+
+    livreTusdKwDemandaPontaFinalValue.textContent =
+      "R$ " + livreDemandaPontaValue.toLocaleString(2);
+  }
+
   //Desconto demanda ponta
-  var tarifaDescontoDemandaPonta = (livreKwTusdValueP * descontoEnergia) / 100;
-  var descontoDemandaPonta = demandaPonta * tarifaDescontoDemandaPonta;
   var livreDescTusdKwDemandaPonta = document.getElementById(
     "livre-tusd-desc-demanda-ponta"
   );
-  livreDescTusdKwDemandaPonta.textContent =
-    demandaPonta.replace(".", ",") + " kW";
   var livreDescTusdKwDemandaPontaValue = document.getElementById(
     "livre-tusd-kw-dp-desc"
   );
-  livreDescTusdKwDemandaPontaValue.textContent =
-    tarifaDescontoDemandaPonta.toLocaleString(2) + " R$/kW";
   var livreDescTusdKwDemandaPontaFinalValue = document.getElementById(
     "livre-desc-tusd-kw-dp-final-value"
   );
-  livreDescTusdKwDemandaPontaFinalValue.textContent =
-    "(R$ " + descontoDemandaPonta.toLocaleString(2) + ")";
 
+  var descDemandaPontaValue = 0;
+  if (modalidadeAcl == "Verde") {
+    var maiorDemanda = Math.max(demandaPonta, demandaForaPonta);
+
+    var maiorTarifa = Math.max(livreKwTusdValueP, livreKwTusdValueFp);
+
+    var tarifa = (descontoEnergia * maiorTarifa) / 100;
+
+    descDemandaPontaValue = parseFloat(maiorDemanda * tarifa);
+
+    livreDescTusdKwDemandaPonta.textContent = maiorDemanda + " kW";
+    livreDescTusdKwDemandaPontaValue.textContent = tarifa.toFixed(2) + " R$/kW";
+    livreDescTusdKwDemandaPontaFinalValue.textContent =
+      "(R$ " + descDemandaPontaValue.toLocaleString(2) + ")";
+  } else {
+    var tarifaDescontoDemandaPonta =
+      (livreKwTusdValueP * descontoEnergia) / 100;
+
+    descDemandaPontaValue = demandaPonta * tarifaDescontoDemandaPonta;
+
+    livreDescTusdKwDemandaPonta.textContent =
+      demandaPonta.replace(".", ",") + " kW";
+
+    livreDescTusdKwDemandaPontaValue.textContent =
+      tarifaDescontoDemandaPonta.toLocaleString(2) + " R$/kW";
+
+    livreDescTusdKwDemandaPontaFinalValue.textContent =
+      "(R$ " + descDemandaPontaValue.toLocaleString(2) + ")";
+  }
   //Demanda Fora ponta
   var livreDemandaForaPonta = demandaForaPonta * livreKwTusdValueFp;
   if (livreKwTusdValueFp != 0) {
@@ -608,30 +651,30 @@ function preencherTabela(
   if (tipoCalculo == "Tipo 1") {
     if (icmsNaTusd == "Não") {
       impEnergiaLivreDist =
-        (lvreDemandaPontaValue +
-          -descontoDemandaPonta +
+        (livreDemandaPontaValue +
+          -descDemandaPontaValue +
           livreDemandaForaPonta +
           -descontoDemandaForaPonta +
           livreConsumoPonta +
           livreConsumoForaPonta) /
           (1 - icms / 100) -
-        (lvreDemandaPontaValue +
-          -descontoDemandaPonta +
+        (livreDemandaPontaValue +
+          -descDemandaPontaValue +
           livreDemandaForaPonta +
           -descontoDemandaForaPonta +
           livreConsumoPonta +
           livreConsumoForaPonta);
     } else {
       impEnergiaLivreDist =
-        (lvreDemandaPontaValue +
-          -descontoDemandaPonta +
+        (livreDemandaPontaValue +
+          -descDemandaPontaValue +
           livreDemandaForaPonta +
           -descontoDemandaForaPonta +
           livreConsumoPonta +
           livreConsumoForaPonta) /
           (1 - icms / 100 - pisCofins / 100) -
-        (lvreDemandaPontaValue +
-          -descontoDemandaPonta +
+        (livreDemandaPontaValue +
+          -descDemandaPontaValue +
           livreDemandaForaPonta +
           -descontoDemandaForaPonta +
           livreConsumoPonta +
@@ -641,23 +684,23 @@ function preencherTabela(
   else {
     if (icmsNaTusd == "Não") {
       impEnergiaLivreDist =
-        (lvreDemandaPontaValue +
+        (livreDemandaPontaValue +
           livreDemandaForaPonta +
           livreConsumoPonta +
           livreConsumoForaPonta) /
           (1 - icms / 100) -
-        (lvreDemandaPontaValue +
+        (livreDemandaPontaValue +
           livreDemandaForaPonta +
           livreConsumoPonta +
           livreConsumoForaPonta);
     } else {
       impEnergiaLivreDist =
-        (lvreDemandaPontaValue +
+        (livreDemandaPontaValue +
           livreDemandaForaPonta +
           livreConsumoPonta +
           livreConsumoForaPonta) /
           (1 - icms / 100 - pisCofins / 100) -
-        (lvreDemandaPontaValue +
+        (livreDemandaPontaValue +
           livreDemandaForaPonta +
           livreConsumoPonta +
           livreConsumoForaPonta);
@@ -669,13 +712,17 @@ function preencherTabela(
 
   //acessoria
   var acessoriaValue = document.getElementById("acessoria-value");
-  acessoriaValue.textContent =
-    "R$ " + custoAdicionalValue.toLocaleString("pt-BR");
+  if (custoAdicional == "Sim") {
+    acessoriaValue.textContent =
+      "R$ " + custoAdicionalValue.toLocaleString("pt-BR");
+  } else {
+    acessoriaValue.textContent = "-";
+  }
 
   //Total Livre
   var livreTotalValue =
-    lvreDemandaPontaValue +
-    -descontoDemandaPonta +
+    livreDemandaPontaValue +
+    -descDemandaPontaValue +
     livreDemandaForaPonta +
     -descontoDemandaForaPonta +
     livreConsumoPonta +
@@ -689,8 +736,8 @@ function preencherTabela(
   totalLivre.textContent =
     "R$ " +
     (
-      lvreDemandaPontaValue +
-      -descontoDemandaPonta +
+      livreDemandaPontaValue +
+      -descDemandaPontaValue +
       livreDemandaForaPonta +
       -descontoDemandaForaPonta +
       livreConsumoPonta +
