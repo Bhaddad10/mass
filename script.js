@@ -923,11 +923,29 @@ function preencherTabela(
       <td id="ecoAnual${i}"></td>
   `;
       }
+
       tableBody.appendChild(newRow);
+      calcularEcoAno(
+        "preco${i}",
+        "ano${i}",
+        "ecoMensal${i}",
+        "eco${i}",
+        "ecoAnual${i}"
+      );
     }
   }
 
-  function calcularEcoAno(valo) {}
+  function calcularEcoAno(idInput, idAcl, idEcomen, idEcoPrctg, idEcoAno) {
+    var preco = document.getElementById(idInput);
+    var valorAcl = document.getElementById(idAcl);
+    var valorEconomia = document.getElementById(idEcomen);
+    var varlorEconomiaPrctg = document.getElementById(idEcoPrctg);
+    var valorEconomiaAno = document.getElementById(idEcoAno);
+
+    preco.addEventListener("change", function () {
+      console.log("mudei kraio");
+    });
+  }
 
   preencherProjecao();
 }
