@@ -100,7 +100,9 @@ function extractParametersFromURL() {
     precoEnergia,
     catDscReh,
     livreDscReh,
-    tipoCalculo
+    tipoCalculo,
+    anosProjetados,
+    mediaPrecoEnergia
   );
   // Agora você pode usar essas variáveis conforme necessário na página "result.html".
 }
@@ -139,7 +141,9 @@ function preencherTabela(
   precoEnergia,
   catDscReh,
   livreDscReh,
-  tipoCalculo
+  tipoCalculo,
+  anosProjetados,
+  mediaPrecoEnergia
 ) {
   ///////////////////////////////////////////////////////////////
   var perfilCativo = document.getElementById("perfil-cativo");
@@ -228,13 +232,13 @@ function preencherTabela(
     var catDemandaPontaValue = parseFloat(maiorDemanda * maiorTarifa);
     catTusdDemandaPonta.textContent = maiorDemanda + " kW";
     catKwValueP.textContent =
-      maiorTarifa.toString().replace(".", ",") + " R$/kW";
+      "R$ " + maiorTarifa.toString().replace(".", ",") + " / kW";
     catKwFinalValueP.textContent =
       "R$ " + (maiorDemanda * maiorTarifa).toLocaleString("pt-BR");
   } else {
     catDemandaPontaValue = demandaPonta * tusdKwValueP;
     catTusdDemandaPonta.textContent = demandaPonta + " kW";
-    catKwValueP.textContent = tusdKwValueP.replace(".", ",") + " R$/kW";
+    catKwValueP.textContent = "R$ " + tusdKwValueP.replace(".", ",") + " / kW";
     catKwFinalValueP.textContent =
       "R$ " + (demandaPonta * tusdKwValueP).toLocaleString("pt-BR");
   }
@@ -248,7 +252,8 @@ function preencherTabela(
     CatDemandaForaPontaValue = 0;
   } else {
     catTusdDemandaForaPonta.textContent = demandaForaPonta + " kW";
-    catKwValueFp.textContent = tusdKwValueFp.replace(".", ",") + " R$/kW";
+    catKwValueFp.textContent =
+      "R$ " + tusdKwValueFp.replace(".", ",") + " / kW";
     catKwFinalValueFp.textContent =
       "R$ " + (demandaForaPonta * tusdKwValueFp).toLocaleString("pt-BR");
     CatDemandaForaPontaValue = parseFloat(demandaForaPonta * tusdKwValueFp);
@@ -257,14 +262,16 @@ function preencherTabela(
   //Consumo Ponta
   var catConsumoPontaValue = consumoPonta * tusdMwhValuep;
   catTusdConsumoPonta.textContent = consumoPonta.replace(".", ",") + " MWh";
-  catTusdMwhValueP.textContent = tusdMwhValuep.replace(".", ",") + " R$/MWh";
+  catTusdMwhValueP.textContent =
+    "R$ " + tusdMwhValuep.replace(".", ",") + " / MWh";
   catMwhFinalValueP.textContent =
     "R$ " + (consumoPonta * tusdMwhValuep).toLocaleString("pt-BR");
   //Consumo fora ponta
   var catConsumoForaPontaValue = consumoForaPonta * tusdMWhValueFp;
   catTusdConsumoForaPonta.textContent =
     consumoForaPonta.replace(".", ",") + " MWh";
-  catTusdMwhValueFp.textContent = tusdMWhValueFp.replace(".", ",") + " R$/MWh";
+  catTusdMwhValueFp.textContent =
+    "R$ " + tusdMWhValueFp.replace(".", ",") + " / MWh";
   catMwhFinalValueFp.textContent =
     "R$ " + (tusdMWhValueFp * consumoForaPonta).toLocaleString("pt-BR");
 
@@ -272,14 +279,15 @@ function preencherTabela(
   //Consumo Ponta
   var catConsumoTePontaValue = consumoPonta * teMwhValuep;
   catTeMwhConsumoPonta.textContent = consumoPonta.replace(".", ",") + " MWh";
-  catTeMwhValuep.textContent = teMwhValuep.replace(".", ",") + " R$/MWh";
+  catTeMwhValuep.textContent = "R$ " + teMwhValuep.replace(".", ",") + " / MWh";
   catTeMwhFinalValuep.textContent =
     "R$ " + (consumoPonta * teMwhValuep).toLocaleString("pt-BR");
   //Consumo Fora Ponta
   var catConsumoTeForaPontaValue = consumoForaPonta * teMwhValueFp;
   catTeMwhConsumoForaPonta.textContent =
     consumoForaPonta.replace(".", ",") + " MWh";
-  catTeMwhValueFp.textContent = teMwhValueFp.replace(".", ",") + " R$/MWh";
+  catTeMwhValueFp.textContent =
+    "R$ " + teMwhValueFp.replace(".", ",") + " / MWh";
   catTeMwhFinalValueFp.textContent =
     "R$ " + (consumoForaPonta * teMwhValueFp).toLocaleString("pt-BR");
 
@@ -298,7 +306,7 @@ function preencherTabela(
     catBandMwh.textContent =
       aux3.toFixed(2).toString().replace(".", ",") + " MWh";
     catBandMwhValue.textContent =
-      amarela.toString().replace(".", ",") + " R$/MWh";
+      "R$ " + amarela.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
       "R$ " + (aux3 * amarela).toLocaleString("pt-BR");
   } else if (bandeira == "Vermelha P1") {
@@ -310,7 +318,7 @@ function preencherTabela(
     catBandMwh.textContent =
       aux3.toFixed(2).toString().replace(".", ",") + " MWh";
     catBandMwhValue.textContent =
-      vermelhap1.toString().replace(".", ",") + " R$/MWh";
+      "R$ " + vermelhap1.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
       "R$ " + (aux3 * vermelhap1).toLocaleString("pt-BR");
   } else if (bandeira == "Vermelha P2") {
@@ -322,7 +330,7 @@ function preencherTabela(
     catBandMwh.textContent =
       aux3.toFixed(2).toString().replace(".", ",") + " MWh";
     catBandMwhValue.textContent =
-      vermelhap2.toString().replace(".", ",") + " R$/MWh";
+      "R$ " + vermelhap2.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
       "R$ " + (aux3 * vermelhap2).toLocaleString("pt-BR");
   }
@@ -412,7 +420,7 @@ function preencherTabela(
     livreTusdKwDemandaPonta.textContent = maiorDemanda + " kW";
 
     livreTusdKwDemandaPontaValue.textContent =
-      maiorTarifa.toFixed(2).replace(".", ",") + " R$/kW";
+      "R$ " + maiorTarifa.toFixed(2).replace(".", ",") + " / kW";
 
     livreTusdKwDemandaPontaFinalValue.textContent =
       "R$ " + livreDemandaPontaValue.toLocaleString(2);
@@ -423,7 +431,7 @@ function preencherTabela(
       demandaPonta.replace(".", ",") + " kW";
 
     livreTusdKwDemandaPontaValue.textContent =
-      livreKwTusdValueP.replace(".", ",") + " R$/kW";
+      "R$ " + livreKwTusdValueP.replace(".", ",") + " / kW";
 
     livreTusdKwDemandaPontaFinalValue.textContent =
       "R$ " + livreDemandaPontaValue.toLocaleString(2);
@@ -452,7 +460,7 @@ function preencherTabela(
 
     livreDescTusdKwDemandaPonta.textContent = maiorDemanda + " kW";
     livreDescTusdKwDemandaPontaValue.textContent =
-      tarifa.toFixed(2).replace(".", ",") + " R$/kW";
+      "R$ " + tarifa.toFixed(2).replace(".", ",") + " / kW";
     livreDescTusdKwDemandaPontaFinalValue.textContent =
       "(R$ " + descDemandaPontaValue.toLocaleString(2) + ")";
   } else {
@@ -465,7 +473,7 @@ function preencherTabela(
       demandaPonta.replace(".", ",") + " kW";
 
     livreDescTusdKwDemandaPontaValue.textContent =
-      tarifaDescontoDemandaPonta.toLocaleString(2) + " R$/kW";
+      "R$ " + tarifaDescontoDemandaPonta.toLocaleString(2) + " / kW";
 
     livreDescTusdKwDemandaPontaFinalValue.textContent =
       "(R$ " + descDemandaPontaValue.toLocaleString(2) + ")";
@@ -481,7 +489,7 @@ function preencherTabela(
     var livreTusdKwDemandaForaPontaValue =
       document.getElementById("livre-tusd-kw-dfp");
     livreTusdKwDemandaForaPontaValue.textContent =
-      livreKwTusdValueFp.replace(".", ",") + " R$/kW";
+      "R$ " + livreKwTusdValueFp.replace(".", ",") + " / kW";
     var livreTusdKwDemandaForaPontaFinalValue = document.getElementById(
       "livre-tusd-kw-dfp-final-value"
     );
@@ -528,7 +536,7 @@ function preencherTabela(
       "livre-tusd-kw-dfp-desc"
     );
     livreDescTusdKwDemandaForaPontaValue.textContent =
-      tarifaDescontoDemandaForaPonta.toLocaleString(2) + " R$/kW";
+      "R$ " + tarifaDescontoDemandaForaPonta.toLocaleString(2) + " / kW";
     var livreDescTusdKwDemandaForaPontaFinalValue = document.getElementById(
       "livre-desc-tusd-kw-dfp-final-value"
     );
@@ -546,7 +554,7 @@ function preencherTabela(
     "livre-tusd-mwh-p-value"
   );
   livreTusdMwhConsumoPontaValue.textContent =
-    livreMwhTusdValueP.replace(".", ",") + " R$/MWh";
+    "R$ " + livreMwhTusdValueP.replace(".", ",") + " / MWh";
   var livreTusdMwhConsumoPontaValueFinalValue = document.getElementById(
     "livre-tusd-mwh-p-final-value"
   );
@@ -563,7 +571,7 @@ function preencherTabela(
     "livre-tusd-mwh-fp-value"
   );
   livreMwhConsumoForaPontaValue.textContent =
-    livreMwhTusdValueFp.replace(".", ",") + " R$/MWh";
+    "R$ " + livreMwhTusdValueFp.replace(".", ",") + " / MWh";
   var livreMwhConsumoForaPontaFinalValue = document.getElementById(
     "livre-tusd-mwh-fp-final-value"
   );
@@ -584,7 +592,7 @@ function preencherTabela(
       "livre-tusd-encargo-mwh-value"
     );
     livreMwhDescontoEncargoPontaValue.textContent =
-      tarifaDescontoEncargo.toFixed(2).replace(".", ",") + " R$/MWh";
+      "R$ " + tarifaDescontoEncargo.toFixed(2).replace(".", ",") + " / MWh";
     var livreMwhDescontoEncargoPontaFinalValue = document.getElementById(
       "livre-tusd-encargo-mwh-final-value"
     );
@@ -606,6 +614,7 @@ function preencherTabela(
     );
     livreMwhDescontoEncargoPontaFinalValue.textContent = "-";
   }
+
   //Custo ccee
   var montanteCustoCcee =
     (consumoPonta * 1 + consumoForaPonta * 1) * (1 + perdas / 100);
@@ -613,7 +622,7 @@ function preencherTabela(
   var livreCustoCcee = document.getElementById("custo-ccee-consumo");
   livreCustoCcee.textContent = montanteCustoCcee.toLocaleString(2) + " MWh";
   var livreCustoCceeValue = document.getElementById("custo-ccee-tarifa");
-  livreCustoCceeValue.textContent = 35 + " R$/MWh";
+  livreCustoCceeValue.textContent = "R$ " + 35 + " / MWh";
   var livreCustoCceeFinalValue = document.getElementById(
     "custo-cee-final-value"
   );
@@ -626,7 +635,7 @@ function preencherTabela(
   livreEnergiaLivre.textContent = montanteCustoCcee.toLocaleString(2) + " MWh";
   var livreEnergiaLivreValue = document.getElementById("energia-livre-tarifa");
   livreEnergiaLivreValue.textContent =
-    tarifaCustoCcee.toLocaleString(2) + " R$/MWh";
+    "R$ " + tarifaCustoCcee.toLocaleString(2) + " / MWh";
   var livreEnergiaLivreFinalValue = document.getElementById(
     "energia-livre-final-value"
   );
@@ -711,11 +720,14 @@ function preencherTabela(
     "R$ " + impEnergiaLivreDist.toLocaleString(2);
 
   //acessoria
+  var custoAcessoria = 0;
   var acessoriaValue = document.getElementById("acessoria-value");
-  if (custoAdicional == "Sim") {
+  if (custoAdicionalValue !== 0) {
+    custoAcessoria = parseFloat(custoAdicionalValue);
     acessoriaValue.textContent =
       "R$ " + custoAdicionalValue.toLocaleString("pt-BR");
   } else {
+    custoAcessoria = 0;
     acessoriaValue.textContent = "-";
   }
 
@@ -731,7 +743,8 @@ function preencherTabela(
     custoTotalCcee +
     energiaLivre +
     impEnergiaLivre +
-    impEnergiaLivreDist;
+    impEnergiaLivreDist +
+    custoAcessoria;
   var totalLivre = document.getElementById("total-livre");
   totalLivre.textContent =
     "R$ " +
@@ -746,7 +759,8 @@ function preencherTabela(
       custoTotalCcee +
       energiaLivre +
       impEnergiaLivre +
-      impEnergiaLivreDist
+      impEnergiaLivreDist +
+      custoAcessoria
     ).toLocaleString(2);
   ///////////////////////////
   var resultTotalCativo = document.getElementById("result-total-cativo");
@@ -782,30 +796,141 @@ function preencherTabela(
   livreTotalValue = livreTotalValue * 12;
   var eco = totalCativo - livreTotalValue;
   var xValues = ["Cativo", "Livre", "Economia"];
-  var yValues = [totalCativo, livreTotalValue, eco]; // Atualize o valor de "Cativo" com cativoTotal
+  var yValues = [totalCativo, livreTotalValue, eco];
   var barColors = ["red", "green", "blue"];
 
-  new Chart("grafico", {
+  new Chart(grafico, {
     type: "bar",
     data: {
       labels: xValues,
       datasets: [
         {
-          label: "Cativo",
-          backgroundColor: barColors,
+          label: "R$",
           data: yValues,
+          backgroundColor: barColors,
+          borderWidth: 1,
         },
       ],
     },
     options: {
-      legend: { display: true },
-      title: {
-        display: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+      plugins: {
+        legend: {
+          display: false, // Define se a legenda será exibida ou não
+          position: "top", // Posição da legenda (pode ser 'top', 'bottom', 'left', 'right', 'chartArea', 'center')
+          labels: {
+            boxWidth: 20, // Largura da caixa da legenda
+            font: {
+              size: 12, // Tamanho da fonte da legenda
+            },
+          },
+        },
+        title: {
+          display: true, // Define se o título do gráfico será exibido ou não
+          text: "Gráfico de Economia Anual", // Texto do título do gráfico
+          font: {
+            size: 18, // Tamanho da fonte do título
+          },
+          color: "black",
+        },
       },
     },
   });
-}
 
+  function preencherProjecao() {
+    var anosProjetados = 5; // Defina o número de anos projetados aqui
+    var tableBody = document.getElementById("tableBody");
+    var anoAtual = new Date().getFullYear();
+
+    for (var i = 0; i < anosProjetados; i++) {
+      var custoDistribuidora = 0;
+      var custAcl = 0;
+      var precoDaEnergia = 0;
+      var ecoMensal = 0;
+      var ecoPrctg = 0;
+      var ecoAnual = 0;
+      var totalAcumulado = 0;
+
+      var projCustoCcee = 0;
+
+      projCustoCcee = precoDaEnergia * (1 - 9.25 / 100);
+
+      var projEnergiaLivre = montanteCustoCcee * projCustoCcee;
+
+      custoDistribuidora = totalCativo / 12;
+
+      custAcl =
+        livreDemandaPontaValue +
+        -descDemandaPontaValue +
+        livreDemandaForaPonta +
+        -descontoDemandaForaPonta +
+        livreConsumoPonta +
+        livreConsumoForaPonta +
+        -descontoEncargo +
+        custoTotalCcee +
+        projEnergiaLivre +
+        impEnergiaLivre +
+        impEnergiaLivreDist +
+        custoAcessoria;
+
+      ecoMensal = custoDistribuidora - custAcl;
+
+      ecoPrctg = parseFloat(ecoMensal) / parseFloat(custoDistribuidora);
+
+      var dataAtual = new Date();
+
+      var mesAtual = dataAtual.getMonth();
+
+      var mesesRestatantes = 11 - mesAtual;
+
+      var ano1 = ecoMensal * parseFloat(mesesRestatantes);
+
+      ecoAnual = ecoMensal * 12;
+
+      var newRow = document.createElement("tr");
+      if (i == 0) {
+        newRow.innerHTML = `
+            <td>${anoAtual + i}</td>
+            <td>R$${custoDistribuidora.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}</td>
+            <td>R$${custAcl.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}</td>
+            <td>R$${precoEnergia.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}</td>
+            <td>R$${ecoMensal.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}</td>
+            <td>${(ecoPrctg * 100).toFixed(2)}%</td>
+            <td>R$${ano1.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}</td>
+        `;
+      } else {
+        newRow.innerHTML = `
+      <td>${anoAtual + i}</td>
+      <td>R$${custoDistribuidora.toLocaleString(2)}</td>
+      <td id="ano${i}"></td>
+      <td id="preco${i}"><input type="text"/></td>
+      <td id="ecoMensal${i}"></td>
+      <td id="eco${i}"></td>
+      <td id="ecoAnual${i}"></td>
+  `;
+      }
+      tableBody.appendChild(newRow);
+    }
+  }
+
+  function calcularEcoAno(valo) {}
+
+  preencherProjecao();
+}
 function getInputs() {
   inpDistribuidora = document.getElementById("distribuidoras").value;
   inpModalidade = document.getElementById("modalidade").value;

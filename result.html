@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="SHORTCUT ICON" href="icon1.png" />
     <script src="script.js"></script>
     <title>Mass Energy | Descontos</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,28 +13,34 @@
     />
     <link href="https://fonts.cdnfonts.com/css/avenir" rel="stylesheet" />
     <style>
-      /* Estilo para a div que contém o gráfico */
       #grafico-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 35%; /* Ajuste a largura conforme necessário */
-        height: 25; /* Ajuste a altura conforme necessário */
+        min-height: 500; /* Ajuste conforme necessário */
         margin: 0 auto;
         background-color: white; /* Fundo branco */
         box-sizing: border-box;
         padding: 10px; /* Espaçamento interno */
       }
+
       /* Estilo para o canvas do gráfico */
       #grafico {
-        max-width: 150%;
+        max-width: 100%; /* O gráfico não irá crescer além do tamanho do contêiner */
       }
 
       table {
         background-color: white;
         margin: 0 auto;
         width: 50%;
+        border-collapse: collapse;
       }
+      th,
+      td {
+        background-color: #f2f2f2;
+        padding: 8px;
+      }
+
       #div-premissas {
         text-align: center;
         width: 100%;
@@ -94,14 +99,13 @@
       </div>
     </div>
     <br /><br />
-
-    <h2>
-      <label for="table-cativo">Simulação Fatura - Consumidor Cativo</label>
-    </h2>
-
+    <h2>Simulações</h2>
     <br />
-    <table border="1" id="tabela-cativo">
+    <table border="1" id="tabela-cativo" style="border: 3px solid black">
       <thead style="text-align: center">
+        <tr>
+          <th colspan="4">Simulação Fatura - Consumidor Cativo</th>
+        </tr>
         <th>Item</th>
         <th>Montante</th>
         <th>Tarifa</th>
@@ -165,13 +169,12 @@
       </tbody>
     </table>
     <br />
-
-    <h2>
-      <label for="table-livre">Simulação Fatura - Consumidor Livre</label>
-    </h2>
     <br />
-    <table border="1" id="tabela-livre">
+    <table border="1" id="tabela-livre" style="border: 3px solid black">
       <thead style="text-align: center">
+        <tr>
+          <th colspan="4">Simulação Fatura - Consumidor Livre</th>
+        </tr>
         <th>Item</th>
         <th>Montante</th>
         <th>Tarifa</th>
@@ -264,7 +267,7 @@
     <h2>
       <label>Resultado Auferido</label>
     </h2>
-    <table border="1" id="tabela-resultado">
+    <table border="1" id="tabela-resultado" style="border: 3px solid black">
       <thead style="text-align: center">
         <th>Mensal</th>
         <th>Valor</th>
@@ -285,7 +288,7 @@
       </tbody>
     </table>
     <br />
-    <table border="1" id="tabela-resultado">
+    <table border="1" id="tabela-resultado" style="border: 3px solid black">
       <thead style="text-align: center">
         <th>Anual</th>
         <th>Valor</th>
@@ -306,13 +309,33 @@
       </tbody>
     </table>
     <br />
-    <h2><label>Gráfico De Economia Anual</label><br /></h2>
     <br />
-    <div id="grafico-container">
-      <canvas id="grafico" width="400" height="300"></canvas>
+    <div id="grafico-container" style="border: 3px solid black">
+      <canvas id="grafico" width="500" height="400"></canvas>
     </div>
+    <br />
+    <br />
+    <table border=1 style="border: 3px solid black">
+      <thead>
+        <tr>
+          <th colspan="7" style="text-align: center">Projeção Econômica</th>
+        </tr>
+        <tr>
+          <th>Ano</th>
+          <th>Custo Distribuidora</th>
+          <th>Custo ACL</th>
+          <th class="editable-cell">Preço da Energia</th>
+          <th>Economia Mensal</th>
+          <th>Economia %</th>
+          <th>Economia Anual</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- As linhas serão adicionadas aqui -->
+      </tbody>
+    </table>
 
-    <main></main>
+    <br /><br />
 
     <footer>
       Copyright &copy; 2022 Mass Energy - Todos os direitos reservados.
