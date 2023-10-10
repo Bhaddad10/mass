@@ -841,113 +841,121 @@ function preencherTabela(
     },
   });
 
+  preencherProjecao();
+
   function preencherProjecao() {
-    var anosProjetados = 5; // Defina o número de anos projetados aqui
     var tableBody = document.getElementById("tableBody");
     var anoAtual = new Date().getFullYear();
+    anoAtual = parseFloat(anoAtual);
 
-    for (var i = 0; i < anosProjetados; i++) {
-      var custoDistribuidora = 0;
-      var custAcl = 0;
-      var precoDaEnergia = 0;
-      var ecoMensal = 0;
-      var ecoPrctg = 0;
-      var ecoAnual = 0;
-      var totalAcumulado = 0;
+    var custoDistribuidora = 0;
+    var custAcl = 0;
+    var precoDaEnergia = precoEnergia;
+    var ecoMensal = 0;
+    var ecoPrctg = 0;
 
-      var projCustoCcee = 0;
+    var projCustoCcee = 0;
+    var newProjCustoCcee = 0;
 
-      projCustoCcee = precoDaEnergia * (1 - 9.25 / 100);
+    projCustoCcee = precoDaEnergia * (1 - 9.25 / 100);
 
-      var projEnergiaLivre = montanteCustoCcee * projCustoCcee;
+    var projEnergiaLivre = montanteCustoCcee * projCustoCcee;
 
-      custoDistribuidora = totalCativo / 12;
+    newProjCustoCcee = precoDaEnergia * (1 - 9.25 / 100);
 
-      custAcl =
-        livreDemandaPontaValue +
-        -descDemandaPontaValue +
-        livreDemandaForaPonta +
-        -descontoDemandaForaPonta +
-        livreConsumoPonta +
-        livreConsumoForaPonta +
-        -descontoEncargo +
-        custoTotalCcee +
-        projEnergiaLivre +
-        impEnergiaLivre +
-        impEnergiaLivreDist +
-        custoAcessoria;
+    custoDistribuidora = totalCativo / 12;
 
-      ecoMensal = custoDistribuidora - custAcl;
+    custAcl =
+      livreDemandaPontaValue +
+      -descDemandaPontaValue +
+      livreDemandaForaPonta +
+      -descontoDemandaForaPonta +
+      livreConsumoPonta +
+      livreConsumoForaPonta +
+      -descontoEncargo +
+      custoTotalCcee +
+      projEnergiaLivre +
+      impEnergiaLivre +
+      impEnergiaLivreDist +
+      custoAcessoria;
 
-      ecoPrctg = parseFloat(ecoMensal) / parseFloat(custoDistribuidora);
+    ecoMensal = custoDistribuidora - custAcl;
 
-      var dataAtual = new Date();
+    ecoPrctg = parseFloat(ecoMensal) / parseFloat(custoDistribuidora);
 
-      var mesAtual = dataAtual.getMonth();
+    var dataAtual = new Date();
 
-      var mesesRestatantes = 11 - mesAtual;
+    var mesAtual = dataAtual.getMonth();
 
-      var ano1 = ecoMensal * parseFloat(mesesRestatantes);
+    var mesesRestatantes = 11 - mesAtual;
 
-      ecoAnual = ecoMensal * 12;
+    var ano1 = ecoMensal * parseFloat(mesesRestatantes);
 
-      var newRow = document.createElement("tr");
-      if (i == 0) {
-        newRow.innerHTML = `
-            <td>${anoAtual + i}</td>
-            <td>R$${custoDistribuidora.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-            })}</td>
-            <td>R$${custAcl.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-            })}</td>
-            <td>R$${precoEnergia.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-            })}</td>
-            <td>R$${ecoMensal.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-            })}</td>
-            <td>${(ecoPrctg * 100).toFixed(2)}%</td>
-            <td>R$${ano1.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-            })}</td>
-        `;
-      } else {
-        newRow.innerHTML = `
-      <td>${anoAtual + i}</td>
+    var rowAno1 = document.createElement("tr");
+    rowAno1.innerHTML = `
+      <td>${anoAtual}</td>
+      <td>R$${custoDistribuidora.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${custAcl.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${precoEnergia.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${ecoMensal.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>${(ecoPrctg * 100).toFixed(2)}%</td>
+      <td>R$${ano1.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+    `;
+
+    tableBody.appendChild(rowAno1);
+    var newProjCustoCcee = mediaPrecoEnergia * (1 - 9.25 / 100);
+    var newProjEnergiaLivre = montanteCustoCcee * newProjCustoCcee;
+    var newAcl =
+      livreDemandaPontaValue +
+      -descDemandaPontaValue +
+      livreDemandaForaPonta +
+      -descontoDemandaForaPonta +
+      livreConsumoPonta +
+      livreConsumoForaPonta +
+      -descontoEncargo +
+      custoTotalCcee +
+      newProjEnergiaLivre +
+      impEnergiaLivre +
+      impEnergiaLivreDist +
+      custoAcessoria;
+
+    var newEcoMensal = custoDistribuidora - newAcl;
+    var newEcoPrctg = (newEcoMensal / custoDistribuidora) * 100;
+    var newAnualValue = newEcoMensal * 12;
+    var rowAnoFinal = document.createElement("tr");
+    rowAnoFinal.innerHTML = `
+      <td>${anoAtual + 1} - ${anoAtual + parseFloat(anosProjetados)}</td>
       <td>R$${custoDistribuidora.toLocaleString(2)}</td>
-      <td id="ano${i}"></td>
-      <td id="preco${i}"><input type="text"/></td>
-      <td id="ecoMensal${i}"></td>
-      <td id="eco${i}"></td>
-      <td id="ecoAnual${i}"></td>
-  `;
-      }
+      <td>R$${newAcl.toLocaleString(2)}</td>
+      <td>R$${mediaPrecoEnergia}</td>
+      <td>R$${newEcoMensal.toLocaleString(2)}</td>
+      <td>${newEcoPrctg.toFixed(2)}%</td>
+      <td>R$${newAnualValue.toLocaleString(2)}</td>
+    `;
 
-      tableBody.appendChild(newRow);
-      calcularEcoAno(
-        "preco${i}",
-        "ano${i}",
-        "ecoMensal${i}",
-        "eco${i}",
-        "ecoAnual${i}"
-      );
-    }
+    tableBody.appendChild(rowAnoFinal);
+
+    var rowResultado = document.createElement("tr");
+
+    rowResultado.innerHTML = `
+      <td colspan="6">Economia em ${anosProjetados} Anos:</td>
+      <td>R$${(newAnualValue * (anosProjetados - 1) + ano1).toLocaleString(
+        2
+      )}</td>
+    `;
+
+    tableBody.appendChild(rowResultado);
   }
-
-  function calcularEcoAno(idInput, idAcl, idEcomen, idEcoPrctg, idEcoAno) {
-    var preco = document.getElementById(idInput);
-    var valorAcl = document.getElementById(idAcl);
-    var valorEconomia = document.getElementById(idEcomen);
-    var varlorEconomiaPrctg = document.getElementById(idEcoPrctg);
-    var valorEconomiaAno = document.getElementById(idEcoAno);
-
-    preco.addEventListener("change", function () {
-      console.log("mudei kraio");
-    });
-  }
-
-  preencherProjecao();
 }
 function getInputs() {
   inpDistribuidora = document.getElementById("distribuidoras").value;
