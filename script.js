@@ -821,19 +821,19 @@ function preencherTabela(
       plugins: {
         legend: {
           display: false, // Define se a legenda será exibida ou não
-          position: "top", // Posição da legenda (pode ser 'top', 'bottom', 'left', 'right', 'chartArea', 'center')
+          position: "top",
           labels: {
-            boxWidth: 20, // Largura da caixa da legenda
+            boxWidth: 20,
             font: {
-              size: 12, // Tamanho da fonte da legenda
+              size: 12,
             },
           },
         },
         title: {
-          display: true, // Define se o título do gráfico será exibido ou não
-          text: "Gráfico de Economia Anual", // Texto do título do gráfico
+          display: true,
+          text: "Gráfico de Economia Anual",
           font: {
-            size: 18, // Tamanho da fonte do título
+            size: 18,
           },
           color: "black",
         },
