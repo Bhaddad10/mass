@@ -949,9 +949,7 @@ function preencherTabela(
 
     rowResultado.innerHTML = `
       <td colspan="6">Economia em ${anosProjetados} Anos:</td>
-      <td>R$${(newAnualValue * (anosProjetados - 1) + ano1).toLocaleString(
-        2
-      )}</td>
+      <td>R$${(newAnualValue * anosProjetados + ano1).toLocaleString(2)}</td>
     `;
 
     tableBody.appendChild(rowResultado);
