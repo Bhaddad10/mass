@@ -1122,8 +1122,8 @@ if (window.location.href.endsWith("simulador.html")) {
     const inpicms = document.getElementById("icms");
     const inppiscofins = document.getElementById("pis-cofins");
 
-    const url = "https://mass-api.onrender.com/distribuidorasInfo";
-    //    const url = "http://127.0.0.1:5000/distribuidorasInfo";
+    //const url = "https://mass-api.onrender.com/distribuidorasInfo";
+    const url = "http://127.0.0.1:5000/distribuidorasInfo";
 
     function populateSelect(selectElement, data, key) {
       var uniqueValues = [...new Set(data.map((item) => item[key]))];
