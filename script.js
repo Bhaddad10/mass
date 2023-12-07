@@ -65,6 +65,18 @@ function extractParametersFromURL() {
   var livreMwhTeValueP = urlParameters["liv-mwh-te-value-p"];
   var livreMwhTeValueFp = urlParameters["liv-mwh-te-value-fp"];
   var descontoEnergia = urlParameters["desconto-energia"];
+  var reajusteAcl = urlParameters["reajusteacl"];
+  var reajusteCat = urlParameters["reajustecat"];
+  var anoMigracao = urlParameters["anomigracao"];
+  var mesMigracao = urlParameters["mesmigracao"];
+  var preco1 = urlParameters["preco1"];
+  var preco2 = urlParameters["preco2"];
+  var preco3 = urlParameters["preco3"];
+  var preco4 = urlParameters["preco4"];
+  var preco5 = urlParameters["preco5"];
+  var geracao = urlParameters["geracao"];
+  var montanteDiesel = urlParameters["montanteDiesel"];
+  var tarifaDiesel = urlParameters["tarifaDiesel"];
 
   preencherTabela(
     demandaPonta,
@@ -102,7 +114,19 @@ function extractParametersFromURL() {
     livreDscReh,
     tipoCalculo,
     anosProjetados,
-    mediaPrecoEnergia
+    mediaPrecoEnergia,
+    reajusteAcl,
+    reajusteCat,
+    anoMigracao,
+    mesMigracao,
+    preco1,
+    preco2,
+    preco3,
+    preco4,
+    preco5,
+    geracao,
+    montanteDiesel,
+    tarifaDiesel
   );
   // Agora você pode usar essas variáveis conforme necessário na página "result.html".
 }
@@ -143,7 +167,19 @@ function preencherTabela(
   livreDscReh,
   tipoCalculo,
   anosProjetados,
-  mediaPrecoEnergia
+  mediaPrecoEnergia,
+  reajusteAcl,
+  reajusteCat,
+  anoMigracao,
+  mesMigracao,
+  preco1,
+  preco2,
+  preco3,
+  preco4,
+  preco5,
+  geracao,
+  montanteDiesel,
+  tarifaDiesel
 ) {
   ///////////////////////////////////////////////////////////////
   var perfilCativo = document.getElementById("perfil-cativo");
@@ -226,7 +262,11 @@ function preencherTabela(
   var valorTotal = document.getElementById("valor-total");
   //Demanda tusd
   //Demanda ponta
+  var text1 = document.getElementById("text-tdp");
+  var text2 = document.getElementById("text-dfp");
   if (modalidade == "Verde") {
+    text1.textContent = "1. TUSD Demanda";
+    text2.textContent = "2.";
     var maiorDemanda = Math.max(demandaPonta, demandaForaPonta);
     var maiorTarifa = Math.max(tusdKwValueP, tusdKwValueFp);
     var catDemandaPontaValue = parseFloat(maiorDemanda * maiorTarifa);
@@ -298,7 +338,7 @@ function preencherTabela(
     catBandMwhValue.textContent = "-";
     catBandFinalValue.textContent = "-";
   } else if (bandeira == "Amarela") {
-    var amarela = 14.43;
+    var amarela = 13.43;
     var aux1 = parseFloat(consumoPonta);
     var aux2 = parseFloat(consumoForaPonta);
     var aux3 = aux1 + aux2;
@@ -310,7 +350,7 @@ function preencherTabela(
     catBandFinalValue.textContent =
       "R$ " + (aux3 * amarela).toLocaleString("pt-BR");
   } else if (bandeira == "Vermelha P1") {
-    var vermelhap1 = 41.69;
+    var vermelhap1 = 55;
     var aux1 = parseFloat(consumoPonta);
     var aux2 = parseFloat(consumoForaPonta);
     var aux3 = aux1 + aux2;
@@ -322,7 +362,7 @@ function preencherTabela(
     catBandFinalValue.textContent =
       "R$ " + (aux3 * vermelhap1).toLocaleString("pt-BR");
   } else if (bandeira == "Vermelha P2") {
-    var vermelhap2 = 94.92;
+    var vermelhap2 = 94;
     var aux1 = parseFloat(consumoPonta);
     var aux2 = parseFloat(consumoForaPonta);
     var aux3 = aux1 + aux2;
@@ -333,6 +373,48 @@ function preencherTabela(
       "R$ " + vermelhap2.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
       "R$ " + (aux3 * vermelhap2).toLocaleString("pt-BR");
+  } else if (bandeira == "Média") {
+    var media = 31.89;
+    var aux1 = parseFloat(consumoPonta);
+    var aux2 = parseFloat(consumoForaPonta);
+    var aux3 = aux1 + aux2;
+    finalBandeiraValue = aux3 * media;
+    catBandMwh.textContent =
+      aux3.toFixed(2).toString().replace(".", ",") + " MWh";
+    catBandMwhValue.textContent =
+      "R$ " + media.toString().replace(".", ",") + " / MWh";
+    catBandFinalValue.textContent =
+      "R$ " + (aux3 * media).toLocaleString("pt-BR");
+  } else if (bandeira == "Escassez Hídrica") {
+    var escassez = 134;
+    var aux1 = parseFloat(consumoPonta);
+    var aux2 = parseFloat(consumoForaPonta);
+    var aux3 = aux1 + aux2;
+    finalBandeiraValue = aux3 * escassez;
+    catBandMwh.textContent =
+      aux3.toFixed(2).toString().replace(".", ",") + " MWh";
+    catBandMwhValue.textContent =
+      "R$ " + escassez.toString().replace(".", ",") + " / MWh";
+    catBandFinalValue.textContent =
+      "R$ " + (aux3 * escassez).toLocaleString("pt-BR");
+  }
+  //Geração diesel
+  var valorDieselFinal = 0;
+
+  var campMontante = document.getElementById("diesel-montante");
+  var campTarifaDiesel = document.getElementById("diesel-tarifa");
+  var dieselTotal = document.getElementById("diesel-total");
+
+  if ((geracao = "Sim")) {
+    campMontante.textContent = montanteDiesel.replace(".", ",") + " MWH";
+    campTarifaDiesel.textContent = "R$ " + tarifaDiesel + " /MWh";
+    valorDieselFinal = montanteDiesel * tarifaDiesel;
+    dieselTotal.textContent = "R$ " + valorDieselFinal;
+  } else {
+    valorDieselFinal = 0;
+    campMontante.textContent = "-";
+    campTarifaDiesel.textContent = "-";
+    dieselTotal.textContent = "-";
   }
 
   //Impostos
@@ -394,7 +476,8 @@ function preencherTabela(
     catConsumoTePontaValue +
     catConsumoTeForaPontaValue +
     finalBandeiraValue +
-    finalImpostosValue;
+    finalImpostosValue +
+    valorDieselFinal;
 
   valorTotal.textContent = "R$ " + totalCativo.toLocaleString("pt-BR");
 
@@ -722,7 +805,7 @@ function preencherTabela(
   //acessoria
   var custoAcessoria = 0;
   var acessoriaValue = document.getElementById("acessoria-value");
-  if (custoAdicional == "Sim") {
+  if (custoAdicional == "sim") {
     custoAcessoria = parseFloat(custoAdicionalValue);
     acessoriaValue.textContent =
       "R$ " + custoAdicionalValue.toLocaleString("pt-BR");
@@ -845,8 +928,34 @@ function preencherTabela(
 
   function preencherProjecao() {
     var tableBody = document.getElementById("tableBody");
-    var anoAtual = new Date().getFullYear();
-    anoAtual = parseFloat(anoAtual);
+
+    var mesDeMigra = 0;
+
+    if (mesMigracao == "Janeiro") {
+      mesDeMigra = 12;
+    } else if (mesMigracao == "Fevereiro") {
+      mesDeMigra = 11;
+    } else if (mesMigracao == "Março") {
+      mesDeMigra = 10;
+    } else if (mesMigracao == "Abril") {
+      mesDeMigra = 9;
+    } else if (mesMigracao == "Maio") {
+      mesDeMigra = 8;
+    } else if (mesMigracao == "Junho") {
+      mesDeMigra = 7;
+    } else if (mesMigracao == "Julho") {
+      mesDeMigra = 6;
+    } else if (mesMigracao == "Agosto") {
+      mesDeMigra = 5;
+    } else if (mesMigracao == "Setembro") {
+      mesDeMigra = 4;
+    } else if (mesMigracao == "Outubro") {
+      mesDeMigra = 3;
+    } else if (mesMigracao == "Novembro") {
+      mesDeMigra = 2;
+    } else if (mesMigracao == "Dezembro") {
+      mesDeMigra = 1;
+    }
 
     var custoDistribuidora = 0;
     var custAcl = 0;
@@ -855,13 +964,10 @@ function preencherTabela(
     var ecoPrctg = 0;
 
     var projCustoCcee = 0;
-    var newProjCustoCcee = 0;
 
     projCustoCcee = precoDaEnergia * (1 - 9.25 / 100);
 
     var projEnergiaLivre = montanteCustoCcee * projCustoCcee;
-
-    newProjCustoCcee = precoDaEnergia * (1 - 9.25 / 100);
 
     custoDistribuidora = totalCativo / 12;
 
@@ -891,31 +997,23 @@ function preencherTabela(
 
     var ano1 = ecoMensal * parseFloat(mesesRestatantes);
 
-    var rowAno1 = document.createElement("tr");
-    rowAno1.innerHTML = `
-      <td>${anoAtual}</td>
-      <td>R$${custoDistribuidora.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-      })}</td>
-      <td>R$${custAcl.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-      })}</td>
-      <td>R$${precoEnergia.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-      })}</td>
-      <td>R$${ecoMensal.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-      })}</td>
-      <td>${(ecoPrctg * 100).toFixed(2)}%</td>
-      <td>R$${ano1.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-      })}</td>
-    `;
+    //////////////////////////////////////////////////////////////////////////
+    var custoDistAno1 = 0;
+    var custoAclano1 = 0;
+    var ecoMensalAno1 = 0;
+    var ecoPrtcgAno1 = 0;
+    var ecoAnualAno1 = 0;
 
-    tableBody.appendChild(rowAno1);
-    var newProjCustoCcee = mediaPrecoEnergia * (1 - 9.25 / 100);
-    var newProjEnergiaLivre = montanteCustoCcee * newProjCustoCcee;
-    var newAcl =
+    var projCustoCceeAno1 = 0;
+    var projEnergiaLivreAno1 = 0;
+
+    projCustoCceeAno1 = preco1 * (1 - 9.25 / 100);
+
+    projEnergiaLivreAno1 = projCustoCceeAno1 * montanteCustoCcee;
+
+    custoDistAno1 = totalCativo / 12;
+
+    custoAclano1 =
       livreDemandaPontaValue +
       -descDemandaPontaValue +
       livreDemandaForaPonta +
@@ -924,35 +1022,357 @@ function preencherTabela(
       livreConsumoForaPonta +
       -descontoEncargo +
       custoTotalCcee +
-      newProjEnergiaLivre +
+      projEnergiaLivreAno1 +
       impEnergiaLivre +
       impEnergiaLivreDist +
       custoAcessoria;
 
-    var newEcoMensal = custoDistribuidora - newAcl;
-    var newEcoPrctg = (newEcoMensal / custoDistribuidora) * 100;
-    var newAnualValue = newEcoMensal * 12;
-    var rowAnoFinal = document.createElement("tr");
-    rowAnoFinal.innerHTML = `
-      <td>${anoAtual + 1} - ${anoAtual + parseFloat(anosProjetados)}</td>
-      <td>R$${custoDistribuidora.toLocaleString(2)}</td>
-      <td>R$${newAcl.toLocaleString(2)}</td>
-      <td>R$${mediaPrecoEnergia}</td>
-      <td>R$${newEcoMensal.toLocaleString(2)}</td>
-      <td>${newEcoPrctg.toFixed(2)}%</td>
-      <td>R$${newAnualValue.toLocaleString(2)}</td>
+    ecoMensalAno1 = custoDistAno1 - custoAclano1;
+
+    ecoPrtcgAno1 =
+      (parseFloat(ecoMensalAno1) / parseFloat(custoDistAno1)) * 100;
+
+    ecoAnualAno1 = ecoMensalAno1 * parseFloat(mesDeMigra);
+    //////////////////////////////////////////////////////////////////////////
+    var custoDistAno2 = 0;
+    var custoAclano2 = 0;
+    var ecoMensalAno2 = 0;
+    var ecoPrtcgAno2 = 0;
+    var ecoAnualAno2 = 0;
+
+    var projCustoCceeAno2 = 0;
+    var projEnergiaLivreAno2 = 0;
+
+    projCustoCceeAno2 = preco2 * (1 - 9.25 / 100);
+
+    projEnergiaLivreAno2 = projCustoCceeAno2 * montanteCustoCcee;
+
+    custoDistAno2 = custoDistAno1 * (1 + reajusteCat / 100);
+
+    custoAclano2 =
+      livreDemandaPontaValue +
+      -descDemandaPontaValue +
+      livreDemandaForaPonta +
+      -descontoDemandaForaPonta +
+      livreConsumoPonta +
+      livreConsumoForaPonta +
+      -descontoEncargo +
+      custoTotalCcee +
+      projEnergiaLivreAno2 +
+      impEnergiaLivre +
+      impEnergiaLivreDist +
+      custoAcessoria;
+
+    custoAclano2 = custoAclano2 * (1 + reajusteAcl / 100);
+
+    ecoMensalAno2 = custoDistAno2 - custoAclano2;
+
+    ecoPrtcgAno2 =
+      (parseFloat(ecoMensalAno2) / parseFloat(custoDistAno2)) * 100;
+
+    ecoAnualAno2 = ecoMensalAno2 * 12;
+    //////////////////////////////////////////////////////////////////////////
+
+    var custoDistAno3 = 0;
+    var custoAclano3 = 0;
+    var ecoMensalAno3 = 0;
+    var ecoPrtcgAno3 = 0;
+    var ecoAnualAno3 = 0;
+
+    var projCustoCceeAno3 = 0;
+    var projEnergiaLivreAno3 = 0;
+
+    projCustoCceeAno3 = preco3 * (1 - 9.25 / 100) * (1 - 9.25 / 100);
+
+    projEnergiaLivreAno3 = projCustoCceeAno3 * montanteCustoCcee;
+
+    custoDistAno3 = custoDistAno2 * (1 + reajusteCat / 100);
+
+    custoAclano3 =
+      livreDemandaPontaValue +
+      -descDemandaPontaValue +
+      livreDemandaForaPonta +
+      -descontoDemandaForaPonta +
+      livreConsumoPonta +
+      livreConsumoForaPonta +
+      -descontoEncargo +
+      custoTotalCcee +
+      projEnergiaLivreAno3 +
+      impEnergiaLivre +
+      impEnergiaLivreDist +
+      custoAcessoria;
+
+    custoAclano3 = custoAclano2 * (1 + reajusteAcl / 100);
+
+    ecoMensalAno3 = custoDistAno3 - custoAclano3;
+
+    ecoPrtcgAno3 =
+      (parseFloat(ecoMensalAno3) / parseFloat(custoDistAno3)) * 100;
+
+    ecoAnualAno3 = ecoMensalAno3 * 12;
+    //////////////////////////////////////////////////////////////////////////
+
+    var custoDistAno4 = 0;
+    var custoAclano4 = 0;
+    var ecoMensalAno4 = 0;
+    var ecoPrtcgAno4 = 0;
+    var ecoAnualAno4 = 0;
+
+    var projCustoCceeAno4 = 0;
+    var projEnergiaLivreAno4 = 0;
+
+    projCustoCceeAno4 = preco4 * (1 - 9.25 / 100) * (1 - 9.25 / 100);
+
+    projEnergiaLivreAno4 = projCustoCceeAno4 * montanteCustoCcee;
+
+    custoDistAno4 = custoDistAno3 * (1 + reajusteCat / 100);
+
+    custoAclano4 =
+      livreDemandaPontaValue +
+      -descDemandaPontaValue +
+      livreDemandaForaPonta +
+      -descontoDemandaForaPonta +
+      livreConsumoPonta +
+      livreConsumoForaPonta +
+      -descontoEncargo +
+      custoTotalCcee +
+      projEnergiaLivreAno4 +
+      impEnergiaLivre +
+      impEnergiaLivreDist +
+      custoAcessoria;
+
+    custoAclano4 = custoAclano3 * (1 + reajusteAcl / 100);
+
+    ecoMensalAno4 = custoDistAno4 - custoAclano4;
+
+    ecoPrtcgAno4 =
+      (parseFloat(ecoMensalAno4) / parseFloat(custoDistAno4)) * 100;
+
+    ecoAnualAno4 = ecoMensalAno4 * 12;
+    //////////////////////////////////////////////////////////////////////////
+
+    var custoDistAno5 = 0;
+    var custoAclano5 = 0;
+    var ecoMensalAno5 = 0;
+    var ecoPrtcgAno5 = 0;
+    var ecoAnualAno5 = 0;
+
+    var projCustoCceeAno5 = 0;
+    var projEnergiaLivreAno5 = 0;
+
+    projCustoCceeAno5 = preco5 * (1 - 9.25 / 100) * (1 - 9.25 / 100);
+
+    projEnergiaLivreAno5 = projCustoCceeAno5 * montanteCustoCcee;
+
+    custoDistAno5 = custoDistAno4 * (1 + reajusteCat / 100);
+
+    custoAclano5 =
+      livreDemandaPontaValue +
+      -descDemandaPontaValue +
+      livreDemandaForaPonta +
+      -descontoDemandaForaPonta +
+      livreConsumoPonta +
+      livreConsumoForaPonta +
+      -descontoEncargo +
+      custoTotalCcee +
+      projEnergiaLivreAno5 +
+      impEnergiaLivre +
+      impEnergiaLivreDist +
+      custoAcessoria;
+
+    custoAclano5 = custoAclano4 * (1 + reajusteAcl / 100);
+
+    ecoMensalAno5 = custoDistAno5 - custoAclano5;
+
+    ecoPrtcgAno5 =
+      (parseFloat(ecoMensalAno5) / parseFloat(custoDistAno5)) * 100;
+
+    ecoAnualAno5 = ecoMensalAno5 * 12;
+    //////////////////////////////////////////////////////////////////////////
+
+    var rowAno1 = document.createElement("tr");
+    var rowAno2 = document.createElement("tr");
+    var rowAno3 = document.createElement("tr");
+    var rowAno4 = document.createElement("tr");
+    var rowAno5 = document.createElement("tr");
+    var rowMedia = document.createElement("tr");
+
+    rowMedia.innerHTML = `
+    <td>${"Média/Total"}
+    <td>${
+      "R$" +
+      (
+        parseFloat(
+          custoDistAno1 +
+            custoDistAno2 +
+            custoDistAno3 +
+            custoDistAno4 +
+            custoDistAno5
+        ) / 5
+      ).toLocaleString("pt-BR")
+    }
+    <td>${
+      "R$" +
+      (
+        parseFloat(
+          custoAclano1 +
+            custoAclano2 +
+            custoAclano3 +
+            custoAclano4 +
+            custoAclano5
+        ) / 5
+      ).toLocaleString("pt-BR")
+    }
+    <td>${
+      "R$" +
+      (
+        (parseFloat(preco1) +
+          parseFloat(preco2) +
+          parseFloat(preco3) +
+          parseFloat(preco4) +
+          parseFloat(preco5)) /
+        5
+      ).toLocaleString("pt-BR")
+    }
+    <td>${
+      "R$" +
+      (
+        parseFloat(
+          ecoMensalAno1 +
+            ecoMensalAno2 +
+            ecoMensalAno3 +
+            ecoMensalAno4 +
+            ecoMensalAno5
+        ) / 5
+      ).toLocaleString("pt-BR")
+    }
+    <td>${(
+      (
+        (ecoPrtcgAno1 +
+          ecoPrtcgAno2 +
+          ecoPrtcgAno3 +
+          ecoPrtcgAno4 +
+          ecoPrtcgAno5) /
+        5
+      ).toFixed(2) + "%"
+    ).toLocaleString("pt-BR")}
+    <td>${
+      "R$" +
+      (
+        parseFloat(
+          ecoAnualAno1 +
+            ecoAnualAno2 +
+            ecoAnualAno3 +
+            ecoAnualAno4 +
+            ecoAnualAno5
+        ) / 5
+      ).toLocaleString("pt-BR")
+    }
+
     `;
 
-    tableBody.appendChild(rowAnoFinal);
-
-    var rowResultado = document.createElement("tr");
-
-    rowResultado.innerHTML = `
-      <td colspan="6">Economia em ${anosProjetados} Anos:</td>
-      <td>R$${(newAnualValue * anosProjetados + ano1).toLocaleString(2)}</td>
+    rowAno1.innerHTML = `
+      <td>${parseFloat(anoMigracao) + " (" + mesMigracao + ")"}</td>
+      <td>R$${custoDistAno1.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${custoAclano1.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${preco1.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${ecoMensalAno1.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>${ecoPrtcgAno1.toFixed(2)}%</td>
+      <td>R$${ecoAnualAno1.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+    `;
+    rowAno2.innerHTML = `
+      <td>${parseFloat(anoMigracao) + 1}</td>
+      <td>R$${custoDistAno2.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${custoAclano2.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${preco2.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${ecoMensalAno2.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>${ecoPrtcgAno2.toFixed(2)}%</td>
+      <td>R$${ecoAnualAno2.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+    `;
+    rowAno3.innerHTML = `
+      <td>${parseFloat(anoMigracao) + 2}</td>
+      <td>R$${custoDistAno3.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${custoAclano3.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${preco3.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${ecoMensalAno3.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>${ecoPrtcgAno3.toFixed(2)}%</td>
+      <td>R$${ecoAnualAno3.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+    `;
+    rowAno4.innerHTML = `
+      <td>${parseFloat(anoMigracao) + 3}</td>
+      <td>R$${custoDistAno4.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${custoAclano4.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${preco4.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${ecoMensalAno4.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>${ecoPrtcgAno4.toFixed(2)}%</td>
+      <td>R$${ecoAnualAno4.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+    `;
+    rowAno5.innerHTML = `
+      <td>${parseFloat(anoMigracao) + 4}</td>
+      <td>R$${custoDistAno5.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${custoAclano5.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${preco5.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>R$${ecoMensalAno5.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
+      <td>${ecoPrtcgAno5.toFixed(2)}%</td>
+      <td>R$${ecoAnualAno5.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      })}</td>
     `;
 
-    tableBody.appendChild(rowResultado);
+    tableBody.appendChild(rowAno1);
+    tableBody.appendChild(rowAno2);
+    tableBody.appendChild(rowAno3);
+    tableBody.appendChild(rowAno4);
+    tableBody.appendChild(rowAno5);
+    tableBody.appendChild(rowMedia);
   }
 }
 function getInputs() {
@@ -965,7 +1385,6 @@ function getInputs() {
   inpDemandaForaPonta = document.getElementById("demanda-fora-ponta").value;
   inpConsumoPonta = document.getElementById("consumo-ponta").value;
   inpConsumoForaPonta = document.getElementById("consumo-fora-ponta").value;
-  inpOutrasUnidades = document.getElementById("unidades-acl").value;
   inpPrecoEnergia = document.getElementById("preco-energia").value;
   inpCustoAdicional = document.getElementById("custo-adicional").value;
   inpCustoAdicionalValue = document.getElementById("custo-value").value;
@@ -975,10 +1394,21 @@ function getInputs() {
   inpPisCofins = document.getElementById("pis-cofins").value;
   inpPerdas = document.getElementById("perdas").value;
   inpTipoCalculo = document.getElementById("calculo").value;
-  inpAnosProjetados = document.getElementById("qtd-anos").value;
-  inpMediaPrecoEnergia = document.getElementById("media-preco-energia").value;
   inpBandeiraTarifaria = document.getElementById("bandeira").value;
   inpDescontoEnergia = document.getElementById("desconto-energia").value;
+  reajusteAcl = document.getElementById("reajuste_acl").value;
+  reajusteCat = document.getElementById("reajuste_cat").value;
+  anoMigracao = document.getElementById("ano_migracao").value;
+  mesMigracao = document.getElementById("mes_migracao").value;
+  preco1 = document.getElementById("energiaAno1").value;
+  preco2 = document.getElementById("energiaAno2").value;
+  preco3 = document.getElementById("energiaAno3").value;
+  preco4 = document.getElementById("energiaAno4").value;
+  preco5 = document.getElementById("energiaAno5").value;
+  geracaoDiesel = document.getElementById("geracao").value;
+  montanteDiesel = document.getElementById("montante-produzido").value;
+  tarifaDiesel = document.getElementById("tarifa-gerador").value;
+
   var nextUrl =
     "result.html?" +
     "distribuidora=" +
@@ -1054,7 +1484,31 @@ function getInputs() {
     "&liv-mwh-te-value-fp=" +
     encodeURIComponent(livreMwhTeValueFp) +
     "&desconto-energia=" +
-    encodeURIComponent(inpDescontoEnergia);
+    encodeURIComponent(inpDescontoEnergia) +
+    "&reajusteacl=" +
+    encodeURIComponent(reajusteAcl) +
+    "&reajustecat=" +
+    encodeURIComponent(reajusteCat) +
+    "&anomigracao=" +
+    encodeURIComponent(anoMigracao) +
+    "&mesmigracao=" +
+    encodeURIComponent(mesMigracao) +
+    "&preco1=" +
+    encodeURIComponent(preco1) +
+    "&preco2=" +
+    encodeURIComponent(preco2) +
+    "&preco3=" +
+    encodeURIComponent(preco3) +
+    "&preco4=" +
+    encodeURIComponent(preco4) +
+    "&preco5=" +
+    encodeURIComponent(preco5) +
+    "&geracao=" +
+    encodeURIComponent(geracaoDiesel) +
+    "&montanteDiesel=" +
+    encodeURIComponent(montanteDiesel) +
+    "&tarifaDiesel=" +
+    encodeURIComponent(tarifaDiesel);
   // Redirecionar o usuário para a nova página com os parâmetros
   window.location.href = nextUrl;
 }
@@ -1069,6 +1523,8 @@ var inpCustoAdicional;
 var inpBandeiraTarifaria;
 var inpImpostos;
 var inpIcmsNaTusd;
+var mesMigracao;
+var geracaoDiesel;
 
 //Variaveis inputadas por texto
 var inpDemandaPonta = 0;
@@ -1085,6 +1541,16 @@ var inpPerdas = 0;
 var inpTipoCalculo;
 var inpAnosProjetados = 0;
 var inpMediaPrecoEnergia = 0;
+var reajusteAcl = 0;
+var reajusteCat = 0;
+var anoMigracao = 0;
+var preco1 = 0;
+var preco2 = 0;
+var preco3 = 0;
+var preco4 = 0;
+var preco5 = 0;
+var montanteDiesel = 0;
+var tarifaDiesel = 0;
 
 //Variaveis buscadas no servidor
 var livreDscReh;
@@ -1251,7 +1717,17 @@ if (window.location.href.endsWith("simulador.html")) {
         });
 
         selectModalidade.addEventListener("change", function () {
+          var mod = selectModalidade.value;
+          var inpDemandaPonta = document.getElementById("demanda-ponta");
           getCativoProfile();
+
+          if (mod == "Verde") {
+            inpDemandaPonta.disabled = true;
+          } else {
+            inpDemandaPonta.disabled = false;
+          }
+
+          selectModalidadeAcl.value = mod;
         });
 
         selectModalidadeAcl.addEventListener("change", function () {
