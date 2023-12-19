@@ -104,21 +104,12 @@
           </select>
           <br /><br />
 
-          <label for="custo-adicional">Custo adicional</label>
-          <select name="custo-adicional" id="custo-adicional">
-            <option disabled selected hidden>Selecione</option>
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-          </select>
-          <br /><br />
-
           <label for="custo-value">Valor do custo adicional</label>
           <input
             type="number"
             name="custo-value"
             id="custo-value"
             placeholder="Ex: R$ 1.800,00"
-            disabled
           />
           <br /><br />
 
@@ -134,6 +125,7 @@
             type="number"
             id="montante-produzido"
             placeholder="Ex: 10 (MWh)"
+            disabled
           />
           <br /><br />
           <label>Custo Do Gerador</label>
@@ -141,7 +133,26 @@
             id="tarifa-gerador"
             type="number"
             placeholder="Ex: 15 (R$/MWh)"
+            disabled
           />
+          <br /><br />
+
+          <label for="">Tarifa Conta Covid</label>
+          <input
+            type="number"
+            id="tarifa-covid"
+            placeholder="Ex: 10 (R$/MWh)"
+          />
+          <br /><br />
+          <label for="">Tarifa Escassez Hídrica</label>
+          <input
+            type="number"
+            id="tarifa-escassez"
+            placeholder="Ex: 10 (R$/MWh)"
+          />
+          <br /><br />
+          <label for="">Custo CCEE</label>
+          <input type="number" id="custo-ccee" placeholder="R$ 35 /MWh" />
           <br /><br />
           <h2>Projeção</h2>
           <br />

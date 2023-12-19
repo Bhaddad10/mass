@@ -77,6 +77,8 @@ function extractParametersFromURL() {
   var geracao = urlParameters["geracao"];
   var montanteDiesel = urlParameters["montanteDiesel"];
   var tarifaDiesel = urlParameters["tarifaDiesel"];
+  var tarifaCovid = urlParameters["tarifaCovid"];
+  var tarifaEscassez = urlParameters["tarifaEscassez"];
 
   preencherTabela(
     demandaPonta,
@@ -126,7 +128,9 @@ function extractParametersFromURL() {
     preco5,
     geracao,
     montanteDiesel,
-    tarifaDiesel
+    tarifaDiesel,
+    tarifaEscassez,
+    tarifaCovid
   );
   // Agora você pode usar essas variáveis conforme necessário na página "result.html".
 }
@@ -179,7 +183,9 @@ function preencherTabela(
   preco5,
   geracao,
   montanteDiesel,
-  tarifaDiesel
+  tarifaDiesel,
+  tarifaEscassez,
+  tarifaCovid
 ) {
   ///////////////////////////////////////////////////////////////
   var perfilCativo = document.getElementById("perfil-cativo");
@@ -196,9 +202,10 @@ function preencherTabela(
   var perfilLivre = document.getElementById("perfil-livre");
   perfilLivre.textContent = tensaoAcl;
   var modalidadeLivre = document.getElementById("modalidade-livre");
+
   modalidadeLivre.textContent = modalidadeAcl;
   var valorEnergia = document.getElementById("valor-energia");
-  valorEnergia.textContent = "R$" + precoEnergia.toLocaleString(2);
+  valorEnergia.textContent = "R$" + precoEnergia;
   var icmsValue = document.getElementById("icms-value");
   icmsValue.textContent = icms + "%";
   var pisCofinsValue = document.getElementById("pis-cofins-value");
@@ -213,6 +220,7 @@ function preencherTabela(
   }
   ////////////////////////////////////////////////////////////////////////
   //Preencher tabela de consumidor cativo
+
   //Demanda Tusd Ponta
   var catTusdDemandaPonta = document.getElementById("cat-tusd-demanda-ponta");
   var catKwValueP = document.getElementById("cat-kw-value-p");
@@ -274,13 +282,21 @@ function preencherTabela(
     catKwValueP.textContent =
       "R$ " + maiorTarifa.toString().replace(".", ",") + " / kW";
     catKwFinalValueP.textContent =
-      "R$ " + (maiorDemanda * maiorTarifa).toLocaleString("pt-BR");
+      "R$ " +
+      (maiorDemanda * maiorTarifa).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   } else {
     catDemandaPontaValue = demandaPonta * tusdKwValueP;
     catTusdDemandaPonta.textContent = demandaPonta + " kW";
     catKwValueP.textContent = "R$ " + tusdKwValueP.replace(".", ",") + " / kW";
     catKwFinalValueP.textContent =
-      "R$ " + (demandaPonta * tusdKwValueP).toLocaleString("pt-BR");
+      "R$ " +
+      (demandaPonta * tusdKwValueP).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   }
 
   //Demanda fora ponta
@@ -295,7 +311,11 @@ function preencherTabela(
     catKwValueFp.textContent =
       "R$ " + tusdKwValueFp.replace(".", ",") + " / kW";
     catKwFinalValueFp.textContent =
-      "R$ " + (demandaForaPonta * tusdKwValueFp).toLocaleString("pt-BR");
+      "R$ " +
+      (demandaForaPonta * tusdKwValueFp).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
     CatDemandaForaPontaValue = parseFloat(demandaForaPonta * tusdKwValueFp);
   }
   //Consumo Tusd
@@ -305,7 +325,11 @@ function preencherTabela(
   catTusdMwhValueP.textContent =
     "R$ " + tusdMwhValuep.replace(".", ",") + " / MWh";
   catMwhFinalValueP.textContent =
-    "R$ " + (consumoPonta * tusdMwhValuep).toLocaleString("pt-BR");
+    "R$ " +
+    (consumoPonta * tusdMwhValuep).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   //Consumo fora ponta
   var catConsumoForaPontaValue = consumoForaPonta * tusdMWhValueFp;
   catTusdConsumoForaPonta.textContent =
@@ -313,7 +337,11 @@ function preencherTabela(
   catTusdMwhValueFp.textContent =
     "R$ " + tusdMWhValueFp.replace(".", ",") + " / MWh";
   catMwhFinalValueFp.textContent =
-    "R$ " + (tusdMWhValueFp * consumoForaPonta).toLocaleString("pt-BR");
+    "R$ " +
+    (tusdMWhValueFp * consumoForaPonta).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   //Consumo TE
   //Consumo Ponta
@@ -321,7 +349,11 @@ function preencherTabela(
   catTeMwhConsumoPonta.textContent = consumoPonta.replace(".", ",") + " MWh";
   catTeMwhValuep.textContent = "R$ " + teMwhValuep.replace(".", ",") + " / MWh";
   catTeMwhFinalValuep.textContent =
-    "R$ " + (consumoPonta * teMwhValuep).toLocaleString("pt-BR");
+    "R$ " +
+    (consumoPonta * teMwhValuep).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   //Consumo Fora Ponta
   var catConsumoTeForaPontaValue = consumoForaPonta * teMwhValueFp;
   catTeMwhConsumoForaPonta.textContent =
@@ -329,7 +361,11 @@ function preencherTabela(
   catTeMwhValueFp.textContent =
     "R$ " + teMwhValueFp.replace(".", ",") + " / MWh";
   catTeMwhFinalValueFp.textContent =
-    "R$ " + (consumoForaPonta * teMwhValueFp).toLocaleString("pt-BR");
+    "R$ " +
+    (consumoForaPonta * teMwhValueFp).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   //Bandeira tarifaria
   var finalBandeiraValue = 0;
@@ -348,7 +384,11 @@ function preencherTabela(
     catBandMwhValue.textContent =
       "R$ " + amarela.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
-      "R$ " + (aux3 * amarela).toLocaleString("pt-BR");
+      "R$ " +
+      (aux3 * amarela).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   } else if (bandeira == "Vermelha P1") {
     var vermelhap1 = 55;
     var aux1 = parseFloat(consumoPonta);
@@ -360,7 +400,11 @@ function preencherTabela(
     catBandMwhValue.textContent =
       "R$ " + vermelhap1.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
-      "R$ " + (aux3 * vermelhap1).toLocaleString("pt-BR");
+      "R$ " +
+      (aux3 * vermelhap1).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   } else if (bandeira == "Vermelha P2") {
     var vermelhap2 = 94;
     var aux1 = parseFloat(consumoPonta);
@@ -372,7 +416,11 @@ function preencherTabela(
     catBandMwhValue.textContent =
       "R$ " + vermelhap2.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
-      "R$ " + (aux3 * vermelhap2).toLocaleString("pt-BR");
+      "R$ " +
+      (aux3 * vermelhap2).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   } else if (bandeira == "Média") {
     var media = 31.89;
     var aux1 = parseFloat(consumoPonta);
@@ -384,7 +432,11 @@ function preencherTabela(
     catBandMwhValue.textContent =
       "R$ " + media.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
-      "R$ " + (aux3 * media).toLocaleString("pt-BR");
+      "R$ " +
+      (aux3 * media).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   } else if (bandeira == "Escassez Hídrica") {
     var escassez = 134;
     var aux1 = parseFloat(consumoPonta);
@@ -396,7 +448,11 @@ function preencherTabela(
     catBandMwhValue.textContent =
       "R$ " + escassez.toString().replace(".", ",") + " / MWh";
     catBandFinalValue.textContent =
-      "R$ " + (aux3 * escassez).toLocaleString("pt-BR");
+      "R$ " +
+      (aux3 * escassez).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   }
   //Geração diesel
   var valorDieselFinal = 0;
@@ -405,11 +461,11 @@ function preencherTabela(
   var campTarifaDiesel = document.getElementById("diesel-tarifa");
   var dieselTotal = document.getElementById("diesel-total");
 
-  if ((geracao = "Sim")) {
-    campMontante.textContent = montanteDiesel.replace(".", ",") + " MWH";
-    campTarifaDiesel.textContent = "R$ " + tarifaDiesel + " /MWh";
+  if (geracao == "Sim") {
+    campMontante.textContent = montanteDiesel;
+    campTarifaDiesel.textContent = tarifaDiesel;
     valorDieselFinal = montanteDiesel * tarifaDiesel;
-    dieselTotal.textContent = "R$ " + valorDieselFinal;
+    dieselTotal.textContent = valorDieselFinal;
   } else {
     valorDieselFinal = 0;
     campMontante.textContent = "-";
@@ -442,7 +498,11 @@ function preencherTabela(
           catConsumoTeForaPontaValue +
           finalBandeiraValue);
       impostoValue.textContent =
-        "R$ " + finalImpostosValue.toLocaleString("pt-BR");
+        "R$ " +
+        finalImpostosValue.toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
     } else if (icmsNaTusd == "Não") {
       //Sem icms na TUSD
       finalImpostosValue =
@@ -463,7 +523,11 @@ function preencherTabela(
           catConsumoTeForaPontaValue +
           finalBandeiraValue);
       impostoValue.textContent =
-        "R$ " + finalImpostosValue.toLocaleString("pt-BR");
+        "R$ " +
+        finalImpostosValue.toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
     }
   }
 
@@ -479,7 +543,12 @@ function preencherTabela(
     finalImpostosValue +
     valorDieselFinal;
 
-  valorTotal.textContent = "R$ " + totalCativo.toLocaleString("pt-BR");
+  valorTotal.textContent =
+    "R$ " +
+    totalCativo.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   //Preencher tabela de consumidor livre
   //Demanda Ponta
@@ -492,6 +561,10 @@ function preencherTabela(
   var livreTusdKwDemandaPontaFinalValue = document.getElementById(
     "livre-tusd-kw-dp-final-value"
   );
+
+  if (demandaForaPonta < 500) {
+    demandaForaPonta = 500;
+  }
   var livreDemandaPontaValue = 0;
   if ((modalidadeAcl = "Verde")) {
     var maiorDemanda = Math.max(demandaPonta, demandaForaPonta);
@@ -503,10 +576,19 @@ function preencherTabela(
     livreTusdKwDemandaPonta.textContent = maiorDemanda + " kW";
 
     livreTusdKwDemandaPontaValue.textContent =
-      "R$ " + maiorTarifa.toFixed(2).replace(".", ",") + " / kW";
+      "R$ " +
+      maiorTarifa.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      " / kW";
 
     livreTusdKwDemandaPontaFinalValue.textContent =
-      "R$ " + livreDemandaPontaValue.toLocaleString(2);
+      "R$ " +
+      livreDemandaPontaValue.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   } else {
     livreDemandaPontaValue = demandaPonta * livreKwTusdValueP;
 
@@ -517,7 +599,11 @@ function preencherTabela(
       "R$ " + livreKwTusdValueP.replace(".", ",") + " / kW";
 
     livreTusdKwDemandaPontaFinalValue.textContent =
-      "R$ " + livreDemandaPontaValue.toLocaleString(2);
+      "R$ " +
+      livreDemandaPontaValue.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   }
 
   //Desconto demanda ponta
@@ -543,9 +629,19 @@ function preencherTabela(
 
     livreDescTusdKwDemandaPonta.textContent = maiorDemanda + " kW";
     livreDescTusdKwDemandaPontaValue.textContent =
-      "R$ " + tarifa.toFixed(2).replace(".", ",") + " / kW";
+      "R$ " +
+      tarifa.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      " / kW";
     livreDescTusdKwDemandaPontaFinalValue.textContent =
-      "(R$ " + descDemandaPontaValue.toLocaleString(2) + ")";
+      "R$ (" +
+      descDemandaPontaValue.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      ")";
   } else {
     var tarifaDescontoDemandaPonta =
       (livreKwTusdValueP * descontoEnergia) / 100;
@@ -556,10 +652,20 @@ function preencherTabela(
       demandaPonta.replace(".", ",") + " kW";
 
     livreDescTusdKwDemandaPontaValue.textContent =
-      "R$ " + tarifaDescontoDemandaPonta.toLocaleString(2) + " / kW";
+      "R$ " +
+      tarifaDescontoDemandaPonta.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      " / kW";
 
     livreDescTusdKwDemandaPontaFinalValue.textContent =
-      "(R$ " + descDemandaPontaValue.toLocaleString(2) + ")";
+      "R$ (" +
+      descDemandaPontaValue.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      ")";
   }
   //Demanda Fora ponta
   var livreDemandaForaPonta = demandaForaPonta * livreKwTusdValueFp;
@@ -577,7 +683,11 @@ function preencherTabela(
       "livre-tusd-kw-dfp-final-value"
     );
     livreTusdKwDemandaForaPontaFinalValue.textContent =
-      "R$ " + livreDemandaForaPonta.toLocaleString(2);
+      "R$ " +
+      livreDemandaForaPonta.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   } else {
     var livreTusdKwDemandaForaPonta = document.getElementById(
       "livre-tusd-demanda-fora-ponta"
@@ -619,12 +729,22 @@ function preencherTabela(
       "livre-tusd-kw-dfp-desc"
     );
     livreDescTusdKwDemandaForaPontaValue.textContent =
-      "R$ " + tarifaDescontoDemandaForaPonta.toLocaleString(2) + " / kW";
+      "R$ " +
+      tarifaDescontoDemandaForaPonta.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      " / kW";
     var livreDescTusdKwDemandaForaPontaFinalValue = document.getElementById(
       "livre-desc-tusd-kw-dfp-final-value"
     );
     livreDescTusdKwDemandaForaPontaFinalValue.textContent =
-      "(R$ " + descontoDemandaForaPonta.toLocaleString(2) + ")";
+      "R$ (" +
+      descontoDemandaForaPonta.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      ")";
   }
   //Consumo Ponta
   var livreConsumoPonta = consumoPonta * livreMwhTusdValueP;
@@ -642,7 +762,11 @@ function preencherTabela(
     "livre-tusd-mwh-p-final-value"
   );
   livreTusdMwhConsumoPontaValueFinalValue.textContent =
-    "R$ " + livreConsumoPonta.toLocaleString(2);
+    "R$ " +
+    livreConsumoPonta.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   //Consumo Fora ponta
   var livreConsumoForaPonta = consumoForaPonta * livreMwhTusdValueFp;
   var livreMwhConsumoForaPonta = document.getElementById(
@@ -659,7 +783,11 @@ function preencherTabela(
     "livre-tusd-mwh-fp-final-value"
   );
   livreMwhConsumoForaPontaFinalValue.textContent =
-    "R$" + livreConsumoForaPonta.toLocaleString(2);
+    "R$" +
+    livreConsumoForaPonta.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   //Desconto tusd encargo ponta
   var tarifaDescontoEncargo =
@@ -675,12 +803,22 @@ function preencherTabela(
       "livre-tusd-encargo-mwh-value"
     );
     livreMwhDescontoEncargoPontaValue.textContent =
-      "R$ " + tarifaDescontoEncargo.toFixed(2).replace(".", ",") + " / MWh";
+      "R$ " +
+      tarifaDescontoEncargo.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      " / MWh";
     var livreMwhDescontoEncargoPontaFinalValue = document.getElementById(
       "livre-tusd-encargo-mwh-final-value"
     );
     livreMwhDescontoEncargoPontaFinalValue.textContent =
-      "(R$ " + descontoEncargo.toLocaleString(2) + ")";
+      "R$ (" +
+      descontoEncargo.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }) +
+      ")";
   } else {
     var livreMwhDescontoEncargoPonta = document.getElementById(
       "livre-tusd-mwh-encargo"
@@ -703,7 +841,11 @@ function preencherTabela(
     (consumoPonta * 1 + consumoForaPonta * 1) * (1 + perdas / 100);
   var tarifaCustoCcee = precoEnergia * (1 - 9.25 / 100);
   var livreCustoCcee = document.getElementById("custo-ccee-consumo");
-  livreCustoCcee.textContent = montanteCustoCcee.toLocaleString(2) + " MWh";
+  livreCustoCcee.textContent =
+    montanteCustoCcee.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }) + " MWh";
   var livreCustoCceeValue = document.getElementById("custo-ccee-tarifa");
   livreCustoCceeValue.textContent = "R$ " + 35 + " / MWh";
   var livreCustoCceeFinalValue = document.getElementById(
@@ -711,20 +853,74 @@ function preencherTabela(
   );
   var custoTotalCcee = montanteCustoCcee * 35;
   livreCustoCceeFinalValue.textContent =
-    "R$ " + custoTotalCcee.toLocaleString(2);
+    "R$ " +
+    custoTotalCcee.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   //Energia livre
   var energiaLivre = montanteCustoCcee * tarifaCustoCcee;
   var livreEnergiaLivre = document.getElementById("energia-livre-consumo");
-  livreEnergiaLivre.textContent = montanteCustoCcee.toLocaleString(2) + " MWh";
+  livreEnergiaLivre.textContent =
+    montanteCustoCcee.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }) + " MWh";
   var livreEnergiaLivreValue = document.getElementById("energia-livre-tarifa");
   livreEnergiaLivreValue.textContent =
-    "R$ " + tarifaCustoCcee.toLocaleString(2) + " / MWh";
+    "R$ " +
+    tarifaCustoCcee.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }) +
+    " / MWh";
   var livreEnergiaLivreFinalValue = document.getElementById(
     "energia-livre-final-value"
   );
   livreEnergiaLivreFinalValue.textContent =
-    "R$ " + energiaLivre.toLocaleString(2);
+    "R$ " +
+    energiaLivre.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
+  ////////////////////////////////////////////////////////
+  //custocovid e escassez
+  var montanteCovid = document.getElementById("conta-covid-consumo");
+  var covidTarifa = document.getElementById("conta-covid-tarifa");
+  var covidFinalValue = document.getElementById("conta-covid-final-value");
+
+  montanteCovid.textContent =
+    montanteCustoCcee.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }) + " MWh";
+  covidTarifa.textContent = "R$ " + tarifaCovid + " /MWh";
+  covidFinalValue.textContent =
+    "R$ " +
+    (montanteCustoCcee * tarifaCovid).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+  var montanteEscassez = document.getElementById("escassez-hidrica-consumo");
+  var escassezTarifa = document.getElementById("escassez-hidrica-tarifa");
+  var escassezFinalValue = document.getElementById(
+    "escassez-hidrica-final-value"
+  );
+
+  montanteEscassez.textContent =
+    montanteCustoCcee.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }) + " MWh";
+  escassezTarifa.textContent = "R$ " + tarifaEscassez + " /MWh";
+  escassezFinalValue.textContent =
+    "R$" +
+    (montanteCustoCcee * tarifaEscassez).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   //Imposto energia livre
   var impEnergiaLivre =
     ((energiaLivre / (1 - 9.25 / 100)) * 9.25) / 100 +
@@ -732,7 +928,11 @@ function preencherTabela(
   var livreImpostoEnergiaLivreValue =
     document.getElementById("imposto-el-value");
   livreImpostoEnergiaLivreValue.textContent =
-    "R$ " + impEnergiaLivre.toLocaleString(2);
+    "R$ " +
+    impEnergiaLivre.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   //Imposto energia livre distribuidora
   /////////////////////////////////////////////Tipo 1
@@ -740,7 +940,7 @@ function preencherTabela(
   var livreImpostoEnergiaLivreDistribuidoraValue =
     document.getElementById("imposto-eld-value");
   var impEnergiaLivreDist = 0;
-  if (tipoCalculo == "Tipo 1") {
+  if (tipoCalculo == "tipo1") {
     if (icmsNaTusd == "Não") {
       impEnergiaLivreDist =
         (livreDemandaPontaValue +
@@ -756,7 +956,9 @@ function preencherTabela(
           -descontoDemandaForaPonta +
           livreConsumoPonta +
           livreConsumoForaPonta);
-    } else {
+    }
+    //Com icms na tusd
+    else {
       impEnergiaLivreDist =
         (livreDemandaPontaValue +
           -descDemandaPontaValue +
@@ -799,16 +1001,25 @@ function preencherTabela(
     }
   }
 
+  console.log(impEnergiaLivreDist);
   livreImpostoEnergiaLivreDistribuidoraValue.textContent =
-    "R$ " + impEnergiaLivreDist.toLocaleString(2);
+    "R$ " +
+    impEnergiaLivreDist.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
   //acessoria
   var custoAcessoria = 0;
   var acessoriaValue = document.getElementById("acessoria-value");
-  if (custoAdicional == "sim") {
+  if (custoAdicionalValue != 0) {
     custoAcessoria = parseFloat(custoAdicionalValue);
     acessoriaValue.textContent =
-      "R$ " + custoAdicionalValue.toLocaleString("pt-BR");
+      "R$ " +
+      custoAdicionalValue.toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
   } else {
     custoAcessoria = 0;
     acessoriaValue.textContent = "-";
@@ -844,12 +1055,25 @@ function preencherTabela(
       impEnergiaLivre +
       impEnergiaLivreDist +
       custoAcessoria
-    ).toLocaleString(2);
+    ).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   ///////////////////////////
   var resultTotalCativo = document.getElementById("result-total-cativo");
-  resultTotalCativo.textContent = "R$ " + totalCativo.toLocaleString(2);
+  resultTotalCativo.textContent =
+    "R$ " +
+    totalCativo.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   var resultTotalLivre = document.getElementById("result-total-livre");
-  resultTotalLivre.textContent = "R$ " + livreTotalValue.toLocaleString(2);
+  resultTotalLivre.textContent =
+    "R$ " +
+    livreTotalValue.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   var economiaMensal = document.getElementById("economia-mensal");
   economiaMensal.textContent =
     "(" +
@@ -857,23 +1081,38 @@ function preencherTabela(
     "%" +
     ")" +
     "R$ " +
-    (totalCativo - livreTotalValue).toLocaleString(2);
+    (totalCativo - livreTotalValue).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   /////////////////////////
   var totalCativoAnual = totalCativo * 12;
   var totalLivreAnual = livreTotalValue * 12;
   var resultadoAnual = totalCativoAnual - totalLivreAnual;
   var resultTotalCativo = document.getElementById("result-total-cativo-anual");
-  resultTotalCativo.textContent = "R$ " + (totalCativo * 12).toLocaleString(2);
+  resultTotalCativo.textContent =
+    "R$ " +
+    (totalCativo * 12).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   var resultTotalLivre = document.getElementById("result-total-livre-anual");
   resultTotalLivre.textContent =
-    "R$ " + (livreTotalValue * 12).toLocaleString(2);
+    "R$ " +
+    (livreTotalValue * 12).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   var economiaMensal = document.getElementById("economia-mensal-anual");
   economiaMensal.textContent =
     "(" +
     ((resultadoAnual / totalCativoAnual) * 100).toFixed(0) +
     "%)" +
     "R$ " +
-    resultadoAnual.toLocaleString(2);
+    resultadoAnual.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   ///////////////////////////////
   totalCativo = totalCativo * 12;
   livreTotalValue = livreTotalValue * 12;
@@ -883,7 +1122,7 @@ function preencherTabela(
   var barColors = ["red", "green", "blue"];
 
   new Chart(grafico, {
-    type: "bar",
+    type: "doughnut",
     data: {
       labels: xValues,
       datasets: [
@@ -896,14 +1135,9 @@ function preencherTabela(
       ],
     },
     options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
       plugins: {
         legend: {
-          display: false, // Define se a legenda será exibida ou não
+          display: true, // Define se a legenda será exibida ou não
           position: "top",
           labels: {
             boxWidth: 20,
@@ -916,7 +1150,7 @@ function preencherTabela(
           display: true,
           text: "Gráfico de Economia Anual",
           font: {
-            size: 18,
+            size: 20,
           },
           color: "black",
         },
@@ -1209,7 +1443,10 @@ function preencherTabela(
             custoDistAno4 +
             custoDistAno5
         ) / 5
-      ).toLocaleString("pt-BR")
+      ).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
     }
     <td>${
       "R$" +
@@ -1221,7 +1458,10 @@ function preencherTabela(
             custoAclano4 +
             custoAclano5
         ) / 5
-      ).toLocaleString("pt-BR")
+      ).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
     }
     <td>${
       "R$" +
@@ -1232,7 +1472,10 @@ function preencherTabela(
           parseFloat(preco4) +
           parseFloat(preco5)) /
         5
-      ).toLocaleString("pt-BR")
+      ).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
     }
     <td>${
       "R$" +
@@ -1244,7 +1487,10 @@ function preencherTabela(
             ecoMensalAno4 +
             ecoMensalAno5
         ) / 5
-      ).toLocaleString("pt-BR")
+      ).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
     }
     <td>${(
       (
@@ -1255,7 +1501,10 @@ function preencherTabela(
           ecoPrtcgAno5) /
         5
       ).toFixed(2) + "%"
-    ).toLocaleString("pt-BR")}
+    ).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}
     <td>${
       "R$" +
       (
@@ -1266,7 +1515,10 @@ function preencherTabela(
             ecoAnualAno4 +
             ecoAnualAno5
         ) / 5
-      ).toLocaleString("pt-BR")
+      ).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
     }
 
     `;
@@ -1275,95 +1527,120 @@ function preencherTabela(
       <td>${parseFloat(anoMigracao) + " (" + mesMigracao + ")"}</td>
       <td>R$${custoDistAno1.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${custoAclano1.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${preco1.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${ecoMensalAno1.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>${ecoPrtcgAno1.toFixed(2)}%</td>
       <td>R$${ecoAnualAno1.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
     `;
     rowAno2.innerHTML = `
       <td>${parseFloat(anoMigracao) + 1}</td>
       <td>R$${custoDistAno2.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${custoAclano2.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${preco2.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${ecoMensalAno2.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>${ecoPrtcgAno2.toFixed(2)}%</td>
       <td>R$${ecoAnualAno2.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
     `;
     rowAno3.innerHTML = `
       <td>${parseFloat(anoMigracao) + 2}</td>
       <td>R$${custoDistAno3.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${custoAclano3.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${preco3.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${ecoMensalAno3.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>${ecoPrtcgAno3.toFixed(2)}%</td>
       <td>R$${ecoAnualAno3.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
     `;
     rowAno4.innerHTML = `
       <td>${parseFloat(anoMigracao) + 3}</td>
       <td>R$${custoDistAno4.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${custoAclano4.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${preco4.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${ecoMensalAno4.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>${ecoPrtcgAno4.toFixed(2)}%</td>
       <td>R$${ecoAnualAno4.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
-      })}</td>
+        maximumFractionDigits: 2,
+      })}</td> 
     `;
     rowAno5.innerHTML = `
       <td>${parseFloat(anoMigracao) + 4}</td>
       <td>R$${custoDistAno5.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${custoAclano5.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${preco5.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>R$${ecoMensalAno5.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
       <td>${ecoPrtcgAno5.toFixed(2)}%</td>
       <td>R$${ecoAnualAno5.toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
       })}</td>
     `;
 
@@ -1386,7 +1663,6 @@ function getInputs() {
   inpConsumoPonta = document.getElementById("consumo-ponta").value;
   inpConsumoForaPonta = document.getElementById("consumo-fora-ponta").value;
   inpPrecoEnergia = document.getElementById("preco-energia").value;
-  inpCustoAdicional = document.getElementById("custo-adicional").value;
   inpCustoAdicionalValue = document.getElementById("custo-value").value;
   inpImpostos = document.getElementById("impostos").value;
   inpIcmsNaTusd = document.getElementById("icms-na-tusd").value;
@@ -1408,6 +1684,8 @@ function getInputs() {
   geracaoDiesel = document.getElementById("geracao").value;
   montanteDiesel = document.getElementById("montante-produzido").value;
   tarifaDiesel = document.getElementById("tarifa-gerador").value;
+  inpTarifaCovid = document.getElementById("tarifa-covid").value;
+  inpTarifaEscassez = document.getElementById("tarifa-escassez").value;
 
   var nextUrl =
     "result.html?" +
@@ -1508,7 +1786,11 @@ function getInputs() {
     "&montanteDiesel=" +
     encodeURIComponent(montanteDiesel) +
     "&tarifaDiesel=" +
-    encodeURIComponent(tarifaDiesel);
+    encodeURIComponent(tarifaDiesel) +
+    "&tarifaEscassez=" +
+    encodeURIComponent(inpTarifaEscassez) +
+    "&tarifaCovid=" +
+    encodeURIComponent(inpTarifaCovid);
   // Redirecionar o usuário para a nova página com os parâmetros
   window.location.href = nextUrl;
 }
@@ -1551,6 +1833,8 @@ var preco4 = 0;
 var preco5 = 0;
 var montanteDiesel = 0;
 var tarifaDiesel = 0;
+var inpTarifaCovid = 0;
+var inpTarifaEscassez = 0;
 
 //Variaveis buscadas no servidor
 var livreDscReh;
@@ -1587,6 +1871,12 @@ if (window.location.href.endsWith("simulador.html")) {
     const inpIcmsNaTusd = document.getElementById("icms-na-tusd");
     const inpicms = document.getElementById("icms");
     const inppiscofins = document.getElementById("pis-cofins");
+    const inpPrecoEnergiaTest = document.getElementById("preco-energia");
+    const inpPrecoEnergiaAno1 = document.getElementById("energiaAno1");
+
+    inpPrecoEnergiaTest.addEventListener("change", function () {
+      inpPrecoEnergiaAno1.value = inpPrecoEnergiaTest.value;
+    });
 
     const url = "https://api-mass.onrender.com/distribuidorasInfo";
 
@@ -1654,17 +1944,6 @@ if (window.location.href.endsWith("simulador.html")) {
           }
         });
 
-        seletorCustoAdicional.addEventListener("change", function () {
-          // Verifica se a opção selecionada é "sim"
-          if (this.value === "sim") {
-            // Habilita o campo "custo-value"
-            campoCustoValue.disabled = false;
-          } else {
-            // Desabilita o campo "custo-value" e limpa seu valor
-            campoCustoValue.disabled = true;
-            campoCustoValue.value = "";
-          }
-        });
         // Adicionando um evento de mudança ao campo selectTensao para atualizar o campo selectModalidade
         selectTensao.addEventListener("change", function () {
           var selectedTensao = selectTensao.value;
@@ -1726,12 +2005,23 @@ if (window.location.href.endsWith("simulador.html")) {
           } else {
             inpDemandaPonta.disabled = false;
           }
-
-          selectModalidadeAcl.value = mod;
         });
 
         selectModalidadeAcl.addEventListener("change", function () {
           getLivreProfile();
+        });
+
+        var selectGeracao = document.getElementById("geracao");
+        var inpMontanteDiesel = document.getElementById("montante-produzido");
+        var inpCustoGerador = document.getElementById("tarifa-gerador");
+        selectGeracao.addEventListener("change", function () {
+          if (selectGeracao.value == "Sim") {
+            inpMontanteDiesel.disabled = false;
+            inpCustoGerador.disabled = false;
+          } else {
+            inpMontanteDiesel.disabled = true;
+            inpCustoGerador.disabled = true;
+          }
         });
 
         function getCativoProfile() {
